@@ -3,10 +3,13 @@ import json
 from twython import Twython
 import pandas as pd
 import numpy as np
-import string
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split as Split
+from sklearn.linear_model import LogisticRegression
+from collections import OrderedDict
+import sklearn.metrics as Metrics
 
 # change these to change tweet range to classify
 START = 0
@@ -25,6 +28,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
 
+
 # connect to twitter api. returns Twython object
 def connect():
     with open('../config/key.yaml') as file:
@@ -38,6 +42,7 @@ def connect():
     twitter = Twython(api_key['key'], access_token=ACCESS_TOKEN)
     return twitter
 
+
 # fetch the latest batch of tweets
 def fetch_tweets():
     twitter = connect()
@@ -47,6 +52,7 @@ def fetch_tweets():
 
     with open('../data/raw_response.json', 'w') as raw:
         json.dump(tweets, raw, indent=2)
+
 
 # tool to classify tweets with command line
 def manually_classify(fetch_new=False):
@@ -90,11 +96,13 @@ def manually_classify(fetch_new=False):
     with open('../data/manually_classified_tweets.json', 'w') as outfile:
         json.dump(output, outfile, indent=2)
 
+
 # remove mentions and links from the tweet
 def strip(tweet):
     blacklist = ['@', 'http']
     stripped = ' '.join(word for word in tweet.split() if not any(x in word for x in blacklist))
     return stripped
+
 
 # grab data from json file and get ready for model
 def preprocess_data():
@@ -105,28 +113,43 @@ def preprocess_data():
 
     # turn text into bag of words vectors
     # TODO: remove punctuation for conjuctions
+    # TODO: consider TfidfVectorizer as well
+    # TODO: Move vectorizer after split when data set is bigger
     df['text'] = df['text'].transform(strip)
-    vectorizer = CountVectorizer(stop_words='english')
+    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1,1))
     x = vectorizer.fit_transform(df['text']).toarray()
 
-    # turn class into one-hot array
-    label = LabelEncoder()
-    one_hot = OneHotEncoder(sparse=False)
-    labels = label.fit_transform(df['class'])
-    y = one_hot.fit_transform(labels.reshape(-1, 1))
+    y = df['class'].to_numpy()
 
     # print out the number of times each word appears
     df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names())
-    print(df.sum().sort_values(ascending=False))
+    print("The 10 most common words are: ")
+    print(df.sum().sort_values(ascending=False)[:10])
 
-    return x, y, vectorizer
+    # split and stratify so that train/test have similar target distribution
+    x_train, x_test, y_train, y_test = Split(x, y, stratify=y)
+    feature_names = np.array(vectorizer.get_feature_names())
+
+    return (x_train, y_train), (x_test, y_test), feature_names
 
 
-def build_model():
-    x, y, vectorizer = preprocess_data()
+def train_model():
+    train, test, feature_names = preprocess_data()
+
+    # extract target names and preserve order. Classifier coef are in this order
+    target_names = np.array(list(OrderedDict.fromkeys(train[1])))
+    classifier = LogisticRegression(random_state=0).fit(train[0], train[1])
+    pred = classifier.predict(test[0])
+    score = Metrics.accuracy_score(test[1], pred)
+    print(f'Classifier accuracy: {score}\n')
+
+    print(f'Top 10 keywords per class: ')
+    for i, label in enumerate(target_names):
+        top10 = np.argsort(classifier.coef_[i])[-10:]
+        print(f'Label: {label}\nWords:{" ,".join(feature_names[top10])}')
+
+    return classifier
 
 
-with open('../data/raw_response.json') as file:
-    data = json.load(file)['statuses']
 # manually_classify()
-build_model()
+train_model()
