@@ -3,17 +3,22 @@ import json
 from twython import Twython
 import pandas as pd
 import numpy as np
+import re
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split as Split
 from sklearn.linear_model import LogisticRegression
-from collections import OrderedDict
-import sklearn.metrics as Metrics
+from sklearn.metrics import classification_report
+from spacy.lang.en  import English
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
 
 # change these to change tweet range to classify
 START = 0
 STOP = 100
+
+STOP_WORDS = set(stopwords.words('english'))
+STOP_WORDS.add('@EpicGames')
 
 categories = {
     1: 'negative',
@@ -97,11 +102,21 @@ def manually_classify(fetch_new=False):
         json.dump(output, outfile, indent=2)
 
 
-# remove mentions and links from the tweet
-def strip(tweet):
-    blacklist = ['@', 'http']
-    stripped = ' '.join(word for word in tweet.split() if not any(x in word for x in blacklist))
-    return stripped
+def strip_links(tweet):
+    return ' '.join(word for word in tweet.split() if 'http' not in word)
+
+def strip_punctuation(word):
+    return re.sub('[?!\'\".,\-#/]+', '', word.lower())
+
+def lemmatize(tweet, tokenizer):
+    tokens = tokenizer(str(tweet))
+
+    lemma_list = []
+    for token in tokens:
+        if str(token) not in STOP_WORDS and str(token.lemma_) != '-PRON-':
+            lemma_list.append(strip_punctuation(str(token.lemma_)))
+
+    return ' '.join(lemma_list)
 
 
 # grab data from json file and get ready for model
@@ -112,12 +127,20 @@ def preprocess_data():
     df = pd.DataFrame(data)
 
     # turn text into bag of words vectors
-    # TODO: remove punctuation for conjuctions
-    # TODO: consider TfidfVectorizer as well
     # TODO: Move vectorizer after split when data set is bigger
-    df['text'] = df['text'].transform(strip)
-    vectorizer = CountVectorizer(stop_words='english', ngram_range=(1,1))
-    x = vectorizer.fit_transform(df['text']).toarray()
+    nlp = English()
+    tokenizer = nlp.Defaults.create_tokenizer(nlp)
+    tweets = df['text'].to_numpy()
+
+    # print tweets before processing
+    print('Tweets before and after processing: ')
+    print(f'Before: \n{tweets[:5]}\n')
+    tweets = np.vectorize(strip_links)(tweets)
+    tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
+    print(f'After: \n{tweets[:5]}\n')
+
+    vectorizer = CountVectorizer(ngram_range=(1,1))
+    x = vectorizer.fit_transform(tweets).toarray()
 
     y = df['class'].to_numpy()
 
@@ -136,17 +159,19 @@ def preprocess_data():
 def train_model():
     train, test, feature_names = preprocess_data()
 
-    # extract target names and preserve order. Classifier coef are in this order
-    target_names = np.array(list(OrderedDict.fromkeys(train[1])))
+    # extract categories and sort. Classifier coef are in this order
+    target_names = list(categories.values())
+    target_names.sort()
+
     classifier = LogisticRegression(random_state=0).fit(train[0], train[1])
     pred = classifier.predict(test[0])
-    score = Metrics.accuracy_score(test[1], pred)
-    print(f'Classifier accuracy: {score}\n')
+
+    print(classification_report(y_true=test[1], y_pred=pred, labels=target_names))
 
     print(f'Top 10 keywords per class: ')
     for i, label in enumerate(target_names):
         top10 = np.argsort(classifier.coef_[i])[-10:]
-        print(f'Label: {label}\nWords:{" ,".join(feature_names[top10])}')
+        print(f'\nLabel: {label}\nWords:{" ,".join(feature_names[top10])}')
 
     return classifier
 
