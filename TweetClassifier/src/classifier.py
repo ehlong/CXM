@@ -15,8 +15,8 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # change these to change tweet range to classify
-START = 25
-STOP = 50
+START = 330
+STOP = 470
 
 STOP_WORDS = set(stopwords.words('english'))
 STOP_WORDS.add('@EpicGames')
