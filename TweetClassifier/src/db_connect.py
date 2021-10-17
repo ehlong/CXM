@@ -57,8 +57,6 @@ def fetch_tweets_by_num(num):
             } for x in results['statuses']
         )
 
-
-        # STEP 3: Get the next max_id
         try:
             # Parse the data returned to get max_id to be passed in consequent call.
             next_results_url_params = results['search_metadata']['next_results']

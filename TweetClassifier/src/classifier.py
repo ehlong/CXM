@@ -1,3 +1,4 @@
+import pymongo
 import yaml
 import json
 from twython import Twython
@@ -8,24 +9,25 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
-from spacy.lang.en  import English
+from spacy.lang.en import English
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # change these to change tweet range to classify
-START = 0
-STOP = 100
+START = 25
+STOP = 50
 
 STOP_WORDS = set(stopwords.words('english'))
 STOP_WORDS.add('@EpicGames')
 
 categories = {
-    1: 'negative',
-    2: 'praise',
-    3: 'error',
-    4: 'wants',
-    5: 'misc'
+    1: 'positive',
+    2: 'bugs/glitches',
+    3: 'security',
+    4: 'store',
+    5: 'wants',
+    6: 'junk'
 }
 
 # allow printing full width in console
@@ -33,39 +35,16 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
 
-
-# connect to twitter api. returns Twython object
-def connect():
-    with open('../config/key.yaml') as file:
-        api_key = yaml.safe_load(file)
-
-    twitter = Twython(api_key['key'], api_key['secret'], oauth_version=2)
-
-    # TODO: move this access token into db? recommended by twython library. Same as committing key tho?
-    ACCESS_TOKEN = twitter.obtain_access_token()
-
-    twitter = Twython(api_key['key'], access_token=ACCESS_TOKEN)
-    return twitter
-
-
-# fetch the latest batch of tweets
-def fetch_tweets():
-    twitter = connect()
-    tweets = {'statuses': []}
-    for i in range(10):
-        tweets['statuses'].extend(twitter.search(q='to:EpicGames', count=100)['statuses'])
-
-    with open('../data/raw_response.json', 'w') as raw:
-        json.dump(tweets, raw, indent=2)
-
-
 # tool to classify tweets with command line
-def manually_classify(fetch_new=False):
-    if fetch_new:
-        fetch_tweets()
+def manually_classify():
 
-    with open('../data/raw_response.json') as file:
-        tweets = json.load(file)
+    # connect to the database, grab the collection
+    client = pymongo.MongoClient(
+        "mongodb+srv://jboothby:420teamchan@cluster0.dxunx.mongodb.net/data?retryWrites=true&w=majority")
+    db = client.get_default_database()
+    collection = db['tweets']
+    cursor = collection.find({})
+    tweets = [x for x in cursor]
 
     output = {'tweets': []}
 
@@ -73,7 +52,7 @@ def manually_classify(fetch_new=False):
     for key, val in categories.items():
         print(f'{key}: {val}')
 
-    for tweet in tweets['statuses'][START:STOP]:
+    for tweet in tweets[START:STOP]:
 
         # skip retweets
         if tweet['text'][:2] == "RT":
@@ -92,13 +71,13 @@ def manually_classify(fetch_new=False):
         tweet_obj = {
             'text': tweet['text'],
             'id': tweet['id'],
-            'date': tweet['created_at'],
+            'date': tweet['date'],
             'class': categories[response]
         }
 
         output['tweets'].append(tweet_obj)
 
-    with open('../data/manually_classified_tweets.json', 'w') as outfile:
+    with open('../data/manually_classified_tweets.json', 'w+') as outfile:
         json.dump(output, outfile, indent=2)
 
 
@@ -176,5 +155,5 @@ def train_model():
     return classifier
 
 
-# manually_classify()
-train_model()
+manually_classify()
+# train_model()
