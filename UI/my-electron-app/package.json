@@ -1,0 +1,11 @@
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "fly"
+  },
+  "author": "Team 6",
+  "license": "ISC"
+}
