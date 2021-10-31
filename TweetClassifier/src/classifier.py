@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
+from sklearn.multiclass import OneVsRestClassifier
 import spacy
 import nltk
 
@@ -104,7 +105,6 @@ def lemmatize(tweet, tokenizer):
 def preprocess_data():
     with open('../data/manually_classified_tweets.json') as file:
         data = json.load(file)['tweets']
-
     df = pd.DataFrame(data)
     # turn text into bag of words vectors
     # TODO: Move vectorizer after split when data set is bigger
@@ -116,7 +116,6 @@ def preprocess_data():
     tweets = np.vectorize(strip_links)(tweets)
     tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
     print(f'After: \n{tweets[:5]}\n')
-
     vectorizer = CountVectorizer(ngram_range=(1, 1))
     x = vectorizer.fit_transform(tweets).toarray()
 
@@ -136,22 +135,18 @@ def preprocess_data():
 
 def train_model():
     train, test, feature_names = preprocess_data()
-    #    bin_Pos
-    #    bin_bug
-    #    bin_sec
-    #    bin_store
-    #    bin_want
     # extract categories and sort. Classifier coef are in this order
     target_names = list(categories.values())
     target_names.sort()
-    classifier = LogisticRegression(random_state=0).fit(train[0], train[1])
+    classifier = OneVsRestClassifier(LogisticRegression(random_state=0)).fit(train[0], train[1])
     pred = classifier.predict(test[0])
 
     print(
-        classification_report(y_true=test[1], y_pred=pred, labels=target_names))
+        classification_report(y_true=test[1], y_pred=pred, labels=target_names, zero_division=0))
 
     print(f'Top 10 keywords per class: ')
     for i, label in enumerate(target_names):
+        # TODO: Replace coef_ as it is depreciated.
         top10 = np.argsort(classifier.coef_[i])[-10:]
         print(f'\nLabel: {label}\nWords:{" ,".join(feature_names[top10])}')
 
