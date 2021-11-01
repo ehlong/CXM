@@ -24,7 +24,7 @@ class BinaryClassifier:
 
     def print_classification_report(self):
         print(f'Classification report for {self.label} binary classifier')
-        print(classification_report(self.y_test, self.y_pred))
+        print(classification_report(self.y_test, self.y_pred, zero_division=0))
 
     def print_top_ten(self):
         print(f'Top 10 keywords for {self.label} are:')
