@@ -1,20 +1,21 @@
 import pymongo
-import yaml
 import json
-from twython import Twython
 import pandas as pd
 import numpy as np
 import re
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
-from sklearn.multiclass import OneVsRestClassifier
+from BinaryClassifier import BinaryClassifier
 import spacy
 import nltk
 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
+
+# allow printing full width in console
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_colwidth', None)
 
 # change these to change tweet range to classify
 START = 330
@@ -23,7 +24,8 @@ STOP = 470
 STOP_WORDS = set(stopwords.words('english'))
 STOP_WORDS.add('@EpicGames')
 
-categories = {
+
+CATEGORIES = {
     1: 'positive',
     2: 'bugs/glitches',
     3: 'security',
@@ -32,10 +34,11 @@ categories = {
     6: 'junk'
 }
 
-# allow printing full width in console
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_colwidth', None)
+BINARY_CLASSIFIERS = {}
+for classification in CATEGORIES.values():
+    BINARY_CLASSIFIERS[classification] = BinaryClassifier(classification)
+
+TESTING_DATA_PERCENTAGE=0.4
 
 
 # tool to classify tweets with command line
@@ -51,7 +54,7 @@ def manually_classify():
     output = {'tweets': []}
 
     print('Input the number of the class category after each tweet')
-    for key, val in categories.items():
+    for key, val in CATEGORIES.items():
         print(f'{key}: {val}')
 
     for tweet in tweets[START:STOP]:
@@ -67,14 +70,14 @@ def manually_classify():
             print('Not a valid string')
             continue
 
-        if response not in categories.keys():
+        if response not in CATEGORIES.keys():
             continue
 
         tweet_obj = {
             'text': tweet['text'],
             'id': tweet['id'],
             'date': tweet['date'],
-            'class': categories[response]
+            'class': CATEGORIES[response]
         }
 
         output['tweets'].append(tweet_obj)
@@ -127,30 +130,34 @@ def preprocess_data():
     print(df.sum().sort_values(ascending=False)[:10])
 
     # split and stratify so that train/test have similar target distribution
-    x_train, x_test, y_train, y_test = Split(x, y, stratify=y)
+    x_train, x_test, y_train, y_test = Split(x, y, stratify=y, test_size=TESTING_DATA_PERCENTAGE)
     feature_names = np.array(vectorizer.get_feature_names_out())
 
     return (x_train, y_train), (x_test, y_test), feature_names
 
 
+# map the y values for each classification category to make them binary
+def split_data_by_class(train, test, feature_names):
+    x_train, y_train = train[0], train[1]
+    x_test, y_test = test[0], test[1]
+
+    for label in CATEGORIES.values():
+        BINARY_CLASSIFIERS[label].feature_names = feature_names
+        BINARY_CLASSIFIERS[label].x_train = x_train
+        BINARY_CLASSIFIERS[label].x_test = x_test
+        BINARY_CLASSIFIERS[label].y_train = list(map(lambda y: 1 if y == label else 0, y_train))
+        BINARY_CLASSIFIERS[label].y_test = list(map(lambda y: 1 if y == label else 0, y_test))
+
+
 def train_model():
     train, test, feature_names = preprocess_data()
-    # extract categories and sort. Classifier coef are in this order
-    target_names = list(categories.values())
-    target_names.sort()
-    classifier = OneVsRestClassifier(LogisticRegression(random_state=0)).fit(train[0], train[1])
-    pred = classifier.predict(test[0])
+    split_data_by_class(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
-    print(
-        classification_report(y_true=test[1], y_pred=pred, labels=target_names, zero_division=0))
-
-    print(f'Top 10 keywords per class: ')
-    for i, label in enumerate(target_names):
-        # TODO: Replace coef_ as it is depreciated.
-        top10 = np.argsort(classifier.coef_[i])[-10:]
-        print(f'\nLabel: {label}\nWords:{" ,".join(feature_names[top10])}')
-
-    return classifier
+    for label in CATEGORIES.values():
+        BINARY_CLASSIFIERS[label].fit_predict()
+        BINARY_CLASSIFIERS[label].print_top_ten()
+        BINARY_CLASSIFIERS[label].print_classification_report()
+        BINARY_CLASSIFIERS[label].graph_pr_curve()
 
 
 # manually_classify()
