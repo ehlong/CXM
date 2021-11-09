@@ -68,7 +68,7 @@ def fetch_tweets_by_num(num):
     return tweets
 
 
-def fetch_tweets_since_id(id):
+def fetch_tweets_since_id(id: int) -> list:
     twitter = connect()
     tweets = []
     while len(temp := twitter.search(q='to:EpicGames', since_id=id, count=100)['statuses']) > 0:
