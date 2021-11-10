@@ -11,7 +11,7 @@ def connect() -> tweepy.Client:
 
     :rtype: tweepy.Client
     """
-    with open('../config/key.yaml') as file:
+    with open('../config/twitter_key.yaml') as file:
         api_key = yaml.safe_load(file)
 
     twitter = tweepy.Client(api_key['bearer'], api_key['key'], api_key['secret'])
@@ -24,9 +24,13 @@ def get_database_collection() -> Collection:
 
     :rtype: Collection
     """
+    with open('../config/db_key.yaml') as file:
+        db_key = yaml.safe_load(file)
+
     # connect to the database, grab the collection
     client = pymongo.MongoClient(
-        "mongodb+srv://jboothby:420teamchan@cluster0.dxunx.mongodb.net/data?retryWrites=true&w=majority")
+        f"mongodb+srv://{db_key['user']}:{db_key['password']}"
+        f"@cluster0.dxunx.mongodb.net/data?retryWrites=true&w=majority")
     db = client.get_default_database()
     collection = db['tweets']
 
