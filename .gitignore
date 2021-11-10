@@ -47,4 +47,5 @@ MANIFEST
 **.ipr
 
 #super secret key stuff
-key.yaml
+twitter_key.yaml
+db_key.yaml
