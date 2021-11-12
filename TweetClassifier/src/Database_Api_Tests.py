@@ -135,5 +135,68 @@ class TestUpdateCollection(unittest.TestCase):
                              msg='Document date does not match documents inserted')
 
 
+class TestFetchUnclassifiedTweets(unittest.TestCase):
+    # create mock mongo database
+    collection = mongomock.MongoClient().db.collection
+
+    # Insert values into collection before each test
+    def setUp(self):
+        self.collection.create_index('id', unique=True)
+
+    # Remove all values from collection after each test
+    def tearDown(self):
+        self.collection.delete_many({})
+
+    def test_returns_empty_list_if_no_tweets_are_unclassifed(self):
+        self.collection.insert_one({'id': 3, 'class': 'junk'})
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 25)
+        self.assertEqual(fetched, [])
+
+    def test_only_returns_unclassified_tweets(self):
+        self.collection.insert_many(unclassified)
+        self.collection.insert_many([{'id': 10, 'class': 'junk'}, {'id': 20, 'class': 'store'}])
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 25)
+        self.assertEqual(len(fetched), len(unclassified))
+
+    def test_returns_correct_number_of_tweets_when_limited(self):
+        self.collection.insert_many(unclassified)
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 2)
+        self.assertEqual(len(fetched), 2)
+
+    def test_returns_lowest_number_ids_first(self):
+        self.collection.insert_many(unclassified.__reversed__())
+        expected = sorted(unclassified, key=itemgetter('id'))[:2]
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 2)
+        self.assertEqual(expected, fetched)
+
+class TestDeleteRetweets(unittest.TestCase):
+    collection = mongomock.MongoClient().db.collection
+
+    mockTweets = [
+        {'id': 10, 'text': 'RT @ pokemon'},              # Actual retweet
+        {'id': 11, 'text': 'RT elonMusk'},              # Actual retweet
+        {'id': 12, 'text': 'R is not a retweet'},       # Not Retweet
+        {'id': 13, 'text': 'R T is not a retweet'},     # Not Retweet
+        {'id': 14, 'text': 'In the RT middle'}          # Not retweet
+    ]
+
+    # Insert values into collection before each test
+    def setUp(self):
+        self.collection.create_index('id', unique=True)
+
+    # Remove all values from collection after each test
+    def tearDown(self):
+        self.collection.delete_many({})
+
+    def test_only_deletes_retweets(self):
+        self.collection.insert_many(self.mockTweets)
+
+        result = Database_Api.delete_retweets(self.collection)
+        contents = list(self.collection.find({}))
+
+        self.assertEqual(result.deleted_count, 2)
+        self.assertEqual(contents, self.mockTweets[2:])
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -62,7 +62,7 @@ def fetch_all_recent_tweets(latest_id: str) -> [dict]:
                 'id': _['id'],
                 'text': _['text'],
                 'date': _['created_at']
-            } for _ in result.data
+            } for _ in result.data if _['text'][:2] != "RT"
         )
 
         if 'next_token' in result.meta:
@@ -114,6 +114,46 @@ def update_collection(collection: Collection, new_values: [dict]) -> BulkWriteRe
     result = collection.bulk_write(requests, ordered=False)
     return result
 
+
+def fetch_batch_of_unclassified_tweets(collection: Collection, num: int) -> [dict]:
+    """
+    Search the database for unclassified tweets
+    return num tweets, starting at lowest Id
+
+    :param collection: A mongodb collection object
+    :param num: Number of tweets to fetch
+    :return: A list of tweets
+    """
+    query = {'class': {'$exists': False}}
+    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
+    return tweets
+
+
+def delete_retweets(collection: Collection) -> BulkWriteResult:
+    """
+    Purge the database of any retweets
+    :param collection:
+    :return: result from bulk write. Query for number deleted
+    """
+    commands = []
+
+    query = {'text': {'$regex': '^RT\\s'}}
+    documents = list(collection.find(query))
+    for document in documents:
+        commands.append(pymongo.DeleteOne({'id': document['id']}))
+
+    result = collection.bulk_write(commands, ordered=False)
+    return result
+
+
+"""Neither of the below comment blocks should remain after UI linkage"""
+
+""" Use this to delete retweets"""
+# collection = get_database_collection()
+# result = delete_retweets(collection)
+# print(f'Deleted {result.deleted_count} retweets from the database')
+
+""" Use this to perform normal tweet fetch"""
 # collection = get_database_collection()
 # latest_id = fetch_latest_id(collection)
 # result = update_collection(collection, fetch_all_recent_tweets(latest_id))
