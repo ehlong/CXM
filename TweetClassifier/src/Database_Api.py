@@ -115,7 +115,7 @@ def update_collection(collection: Collection, new_values: [dict]) -> BulkWriteRe
     return result
 
 
-def fetch_batch_of_unclassified_tweets(collection: Collection, num: int) -> [dict]:
+def fetch_batch_of_unclassified_tweets(collection: Collection, start, stop) -> [dict]:
     """
     Search the database for unclassified tweets
     return num tweets, starting at lowest Id
@@ -125,7 +125,7 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, num: int) -> [dic
     :return: A list of tweets
     """
     query = {'class': {'$exists': False}}
-    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
+    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))[start:stop]
     return tweets
 
 

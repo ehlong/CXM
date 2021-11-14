@@ -16,7 +16,6 @@ def manually_classify():
     Query the database for unclassified tweets
     Add manual classifications and insert back into database
     """
-
     # connect to the database, grab the collection
     collection = Database_Api.get_database_collection()
 
@@ -24,16 +23,20 @@ def manually_classify():
     while True:
         print('Classify 25 tweets at a time. Press Q at any time to exit')
         print('Input the number of the class category after each tweet')
+
+        start = int(input('Which tweet are you starting at? '))
+        stop = int(input('Which tweet are you stopping at? '))
+
         for key, val in CATEGORIES.items():
             print(f'{key}: {val}')
 
-        tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, 25)
+        tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, start, stop)
 
         i = 0
         while i < len(tweets):
             response = input(tweets[i]['text'] + ': ')
-            if response.lower() in ['q', 'exit', 'quit', 'please make it stop']:
-                exit(0)
+            # if response.lower() in ['q', 'exit', 'quit', 'please make it stop']:
+            #     exit(0)
 
             try:
                 response = int(response)
