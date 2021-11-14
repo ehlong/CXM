@@ -41,7 +41,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-node_modules/
+UI/my-electron-app/node_modules/
 
 #Pycharm
 **/.idea/misc.xml
