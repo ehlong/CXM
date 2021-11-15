@@ -8,6 +8,7 @@ function get_tweet_callback(data) {
 //      console.log("to: " + tweets[key]);
       document.getElementById(elementId).innerHTML =
       "<h2>Tweet ID: " + key + "</h2>\n" +
-      "<p>" + tweets[key] + "</p>";
+      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
+      "<p>" + tweets[key]['text'] + "</p>";
   }
 }
