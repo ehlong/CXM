@@ -1,5 +1,10 @@
 <!-- This is where we will manually classify our tweets -->
 <!DOCTYPE html>
+<script src="./src/classification.js"></script>
+<script src="./src/rest.js"></script>
+<script>
+  httpGetAsync("http://127.0.0.1:5000/unclassified_tweets/", get_tweet_callback);
+</script>
 <html>
 <head>   
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,4 +82,4 @@
         </ul>
     </ul>
   </nav>
-</html> 
+</html>
