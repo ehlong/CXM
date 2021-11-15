@@ -14,14 +14,13 @@ def retrieve_unclassified():
         return "Unable to open database key."
 
     # there are none right now -_-
-    # tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, 0, 9)
-    generated_tweets = ["This tweet came from REST, #" + str(i) for i in range(9)]
+    tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, 0, 9)
     ret_val = {}
-    for i, tweet in enumerate(generated_tweets):
-        ret_val[i] = tweet
+    for i, tweet in enumerate(tweets):
+        ret_val[tweet['id']] = tweet['text']
     return ret_val
 
 
 if __name__ == '__main__':
-    # this should be modified with host='0.0.0.0' to make the server puvblicly available
+    # this should be modified with host='0.0.0.0' to make the server publicly available
     app.run()
