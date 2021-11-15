@@ -129,6 +129,19 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, start, stop) -> [
     return tweets
 
 
+def fetch_classified_tweets() -> [dict]:
+    """
+    Search the database for classified tweets
+    return tweets
+
+    :return: A list of tweets
+    """
+    collection = get_database_collection()
+    query = {'class': {'$exists': True}}
+    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
+    return tweets
+
+
 def delete_retweets(collection: Collection) -> BulkWriteResult:
     """
     Purge the database of any retweets
