@@ -41,10 +41,12 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+UI/my-electron-app/node_modules/
 
 #Pycharm
 **/.idea/misc.xml
 **.ipr
 
 #super secret key stuff
-key.yaml
+twitter_key.yaml
+db_key.yaml

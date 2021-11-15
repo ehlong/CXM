@@ -31,7 +31,8 @@ class BinaryClassifier:
         print(self.feature_names[np.argsort(self.model.coef_)[-10:]])
 
     def graph_pr_curve(self):
-        self.precision, self.recall, self.thresholds = precision_recall_curve(self.y_test, self.y_pred)
+        y_score = self.model.predict_proba(self.x_test)[:,1]
+        self.precision, self.recall, self.thresholds = precision_recall_curve(self.y_test, y_score)
         plt.plot(self.recall, self.precision)
         plt.xlabel('Recall')
         plt.ylabel('Precision')
