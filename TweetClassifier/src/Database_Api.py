@@ -115,31 +115,43 @@ def update_collection(collection: Collection, new_values: [dict]) -> BulkWriteRe
     return result
 
 
-def fetch_batch_of_unclassified_tweets(collection: Collection, start, stop) -> [dict]:
+def fetch_batch_of_unclassified_tweets(collection: Collection, num: int = 0, all: bool = False) -> [dict]:
     """
     Search the database for unclassified tweets
     return num tweets, starting at lowest Id
 
+    :param all: If true, return every unclassified tweet
     :param collection: A mongodb collection object
     :param num: Number of tweets to fetch
     :return: A list of tweets
     """
     query = {'class': {'$exists': False}}
-    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))[start:stop]
+    if all:
+        tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
+    else:
+        tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
     return tweets
 
 
-def fetch_classified_tweets() -> [dict]:
+def fetch_for_manual_classify(collection: Collection, num: int) -> [dict]:
     """
-    Search the database for classified tweets
+    Fetch num tweets from the collection to manually classify
+    Insert a placeholder class for these tweets so that successive calls don't
+    return the same tweets during concurrent classifying
+    :param collection: A pymongo collection object
+    :param num: Number of tweets to fetch
+    :return: A list of num tweets
+    """
+    tweets = fetch_batch_of_unclassified_tweets(collection, num=num)
+
+    # add placeholder class for each tweet
+    updates = [x.copy() for x in tweets]
+    for update in updates:
+        update['class'] = 'being classified'
+    update_collection(collection, updates)
+
     return tweets
 
-    :return: A list of tweets
-    """
-    collection = get_database_collection()
-    query = {'class': {'$exists': True}}
-    tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
-    return tweets
 
 
 def delete_retweets(collection: Collection) -> BulkWriteResult:
