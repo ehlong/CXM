@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV, KFold
-from sklearn.metrics import classification_report, precision_recall_curve
+from sklearn.metrics import classification_report, PrecisionRecallDisplay
 
 
 class CrossValidator:
@@ -19,7 +19,8 @@ class CrossValidator:
 
     def fit_predict(self):
         cv = KFold(n_splits=5)
-        grid = GridSearchCV(self.model, dict(), scoring='f1',n_jobs=-1, cv=cv, refit=True)
+        grid = GridSearchCV(self.model, dict(), scoring='f1',n_jobs=-1, cv=cv,
+                            refit=True)
         results = grid.fit(self.x, self.y)
         self.model = results.best_estimator_
         self.y_pred = self.model.predict(self.x)
@@ -34,9 +35,6 @@ class CrossValidator:
 
     def graph_pr_curve(self):
         y_score = self.model.predict_proba(self.x)[:,1]
-        self.precision, self.recall, self.thresholds = precision_recall_curve(self.y, y_score)
-        plt.plot(self.recall, self.precision)
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
+        PrecisionRecallDisplay.from_predictions(self.y, y_score)
         plt.title(f'PR curve for {self.label} cv-d binary classifier')
         plt.show()

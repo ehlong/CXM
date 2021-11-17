@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, precision_recall_curve
+from sklearn.metrics import classification_report, PrecisionRecallDisplay
 
 
 class BinaryClassifier:
@@ -32,9 +32,6 @@ class BinaryClassifier:
 
     def graph_pr_curve(self):
         y_score = self.model.predict_proba(self.x_test)[:,1]
-        self.precision, self.recall, self.thresholds = precision_recall_curve(self.y_test, y_score)
-        plt.plot(self.recall, self.precision)
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
-        plt.title(f'PR curve for {self.label} binary classifier')
+        PrecisionRecallDisplay.from_predictions(self.y_test, y_score)
+        plt.title(f'PR curve for {self.label} cv-d binary classifier')
         plt.show()
