@@ -12,9 +12,9 @@ class CrossValidator:
         self.x = None
         self.y = None
         self.y_pred = None
-        self.precision = None
-        self.recall = None
-        self.thresholds = None
+        #self.precision = None
+        #self.recall = None
+        #self.thresholds = None
         self.feature_names = None
 
     def fit_predict(self):
@@ -38,3 +38,12 @@ class CrossValidator:
         PrecisionRecallDisplay.from_predictions(self.y, y_score)
         plt.title(f'PR curve for {self.label} cv-d binary classifier')
         plt.show()
+
+    # TODO: work with this refit to make it do the thing
+    def refit(self):
+        cv = KFold(n_splits=5)
+        grid = GridSearchCV(self.model(warm_start=True), dict(), scoring='f1',n_jobs=-1, cv=cv,
+                            refit=True)
+        results = grid.fit(self.x, self.y)
+        self.model = results.best_estimator_
+        self.y_pred = self.model.predict(self.x)
