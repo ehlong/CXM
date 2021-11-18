@@ -12,6 +12,7 @@ ENV/
 **/.idea/**/dictionaries
 **/.idea/**/shelf
 **/.idea/inspectionProfiles
+.DS_Store
 
 # Sensitive or high-churn files
 **/.idea/**/dataSources/

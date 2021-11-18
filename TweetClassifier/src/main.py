@@ -1,4 +1,4 @@
-import pymongo
+from Database_Api import fetch_classified_tweets as fetch
 import json
 import pandas as pd
 import numpy as np
@@ -6,12 +6,14 @@ import re
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
 from BinaryClassifier import BinaryClassifier
+from CrossValidator import CrossValidator
 import spacy
 import nltk
 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
+# TODO: Change preprocess_data for binClass to work
 # allow printing full width in console
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -32,6 +34,10 @@ CATEGORIES = {
 BINARY_CLASSIFIERS = {}
 for classification in CATEGORIES.values():
     BINARY_CLASSIFIERS[classification] = BinaryClassifier(classification)
+
+CROSS_VALIDATORS = {}
+for classification in CATEGORIES.values():
+    CROSS_VALIDATORS[classification] = CrossValidator(classification)
 
 TESTING_DATA_PERCENTAGE=0.4
 
@@ -82,9 +88,37 @@ def preprocess_data():
     # split and stratify so that train/test have similar target distribution
     x_train, x_test, y_train, y_test = Split(x, y, stratify=y, test_size=TESTING_DATA_PERCENTAGE)
     feature_names = np.array(vectorizer.get_feature_names_out())
-
+    # return x, y
     return (x_train, y_train), (x_test, y_test), feature_names
 
+
+def preprocess_data_cv():
+    data = fetch()
+    df = pd.DataFrame(data)
+    # turn text into bag of words vectors
+    # TODO: Move vectorizer after split when data set is bigger
+    tweets = df['text'].to_numpy()
+    tokenizer = spacy.load('en_core_web_sm')
+    # print tweets before processing
+    print('Tweets before and after processing: ')
+    print(f'Before: \n{tweets[:5]}\n')
+    tweets = np.vectorize(strip_links)(tweets)
+    tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
+    print(f'After: \n{tweets[:5]}\n')
+    vectorizer = CountVectorizer(ngram_range=(1, 1))
+    x = vectorizer.fit_transform(tweets).toarray()
+
+    y = df['class'].to_numpy()
+
+    # print out the number of times each word appears
+    df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names_out())
+    print("The 10 most common words are: ")
+    print(df.sum().sort_values(ascending=False)[:10])
+
+    # split and stratify so that train/test have similar target distribution
+    feature_names = np.array(vectorizer.get_feature_names_out())
+    # return x, y
+    return x, y, feature_names
 
 # map the y values for each classification category to make them binary
 def split_data_by_class(train, test, feature_names):
@@ -98,6 +132,14 @@ def split_data_by_class(train, test, feature_names):
         BINARY_CLASSIFIERS[label].y_train = list(map(lambda y: 1 if y == label else 0, y_train))
         BINARY_CLASSIFIERS[label].y_test = list(map(lambda y: 1 if y == label else 0, y_test))
 
+def split_data_by_class_cv(x, y, feature_names):
+    x = x
+    y = y
+    for label in CATEGORIES.values():
+        CROSS_VALIDATORS[label].feature_names = feature_names
+        CROSS_VALIDATORS[label].x = x
+        CROSS_VALIDATORS[label].y = list(map(lambda o: 1 if o == label else 0, y))
+
 
 def train_model():
     train, test, feature_names = preprocess_data()
@@ -109,6 +151,15 @@ def train_model():
         BINARY_CLASSIFIERS[label].print_classification_report()
         BINARY_CLASSIFIERS[label].graph_pr_curve()
 
+def train_model_cv():
+    x, y, feature_names = preprocess_data_cv()
+    split_data_by_class_cv(x, y, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
+
+    for label in CATEGORIES.values():
+        CROSS_VALIDATORS[label].fit_predict()
+        CROSS_VALIDATORS[label].print_top_ten()
+        CROSS_VALIDATORS[label].print_classification_report()
+        CROSS_VALIDATORS[label].graph_pr_curve()
 
 # manually_classify()
-train_model()
+train_model_cv()

@@ -163,11 +163,51 @@ class TestFetchUnclassifiedTweets(unittest.TestCase):
         fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 2)
         self.assertEqual(len(fetched), 2)
 
+    def test_returns_all_tweets_when_all_flag_is_true(self):
+        self.collection.insert_many(unclassified)
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, all=True)
+        self.assertEqual(fetched.__len__(), unclassified.__len__())
+
     def test_returns_lowest_number_ids_first(self):
         self.collection.insert_many(unclassified.__reversed__())
         expected = sorted(unclassified, key=itemgetter('id'))[:2]
         fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, 2)
         self.assertEqual(expected, fetched)
+
+
+class TestFetchManualClassify(unittest.TestCase):
+    collection = mongomock.MongoClient().db.collection
+
+    # Insert values into collection before each test
+    def setUp(self):
+        self.collection.create_index('id', unique=True)
+        self.collection.insert_many(unclassified)
+
+    # Remove all values from collection after each test
+    def tearDown(self):
+        self.collection.delete_many({})
+
+    def test_fetches_correct_number_of_tweets(self):
+        fetched = Database_Api.fetch_for_manual_classify(self.collection, 2)
+        self.assertEqual(fetched.__len__(), 2)
+
+    def test_inserts_placeholder_class(self):
+        fetched = Database_Api.fetch_for_manual_classify(self.collection, unclassified.__len__())
+        tweets_with_temp_classes = list(self.collection.find({'class': 'being classified'}))
+        self.assertEqual(tweets_with_temp_classes.__len__(), unclassified.__len__())
+
+    def test_update_still_works_after_placeholder_classes(self):
+        fetched = Database_Api.fetch_for_manual_classify(self.collection, unclassified.__len__())
+        for tweet in fetched:
+            tweet['class'] = 'new class'
+        results = Database_Api.update_collection(self.collection, fetched)
+        self.assertEqual(results.modified_count, unclassified.__len__())
+
+        new_db_contents = list(self.collection.find({}))
+        for tweet in new_db_contents:
+            self.assertEqual(tweet['class'], 'new class')
+
+
 
 class TestDeleteRetweets(unittest.TestCase):
     collection = mongomock.MongoClient().db.collection
