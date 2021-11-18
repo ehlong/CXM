@@ -7,13 +7,22 @@ app = Flask(__name__)
 
 @app.route('/unclassified_tweets/')
 def retrieve_unclassified():
+    """
+    Function representing the /unclassified_tweets/ endpoint.
+    Pulls tweets from the database using the Database_API
+    :return:
+    dictionary mapping 'id' to
+        dictionary mapping
+            'text' to tweet contents ('text')
+            'date' to tweet time data ('date')
+    (this is converted into a json string with the same mappings when sent by Flask)
+    """
     # Goober error checking
     try:
         collection = Database_Api.get_database_collection()
     except FileNotFoundError:
         return "Unable to open database key."
 
-    # there are none right now -_-
     tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, 0, 9)
     ret_val = {}
     for i, tweet in enumerate(tweets):
