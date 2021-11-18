@@ -132,6 +132,26 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, num: int = 0, all
         tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
     return tweets
 
+def fetch_classified_tweets() -> [dict]:
+     """
+     Search the database for classified tweets
+     return tweets
+
+     :return: A list of tweets
+     """
+     collection = get_database_collection()
+     query = {'class': {'$exists': True}}
+     tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
+     tweets = fetch_batch_of_unclassified_tweets(collection, num=num)
+
+     # add placeholder class for each tweet
+     updates = [x.copy() for x in tweets]
+     for update in updates:
+         update['class'] = 'being classified'
+     update_collection(collection, updates)
+
+     return tweets
+
 
 def fetch_for_manual_classify(collection: Collection, num: int) -> [dict]:
     """
