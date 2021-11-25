@@ -1,8 +1,10 @@
+import json
 import pymongo
 from pymongo.collection import Collection
 from pymongo.results import BulkWriteResult
 import tweepy
 import yaml
+from datetime import datetime
 
 
 def connect() -> tweepy.Client:
@@ -37,7 +39,7 @@ def get_database_collection() -> Collection:
     return collection
 
 
-def fetch_all_recent_tweets(latest_id: str) -> [dict]:
+def fetch_all_recent_tweets_from_twitter(latest_id: str) -> [dict]:
     """
     Returns a list of all tweets newer than 7 days that occurred after latest_id
 
@@ -90,6 +92,8 @@ def update_collection(collection: Collection, new_values: [dict]) -> BulkWriteRe
     This will create a new document in the collection if the document doesn't already exist
     If the document is already in the database, it will update it
 
+    DO NOT EDIT THIS FUNCTION. RISK TO DATABASE INTEGRITY
+    BE VERY CAREFUL WHAT YOU PASS TO THIS FUNCTION. IT WILL OVERWRITE DATABASE CONTENTS
     :param collection: A mongodb collection object
     :param new_values: A list of tweets to insert
     :rtype: BulkWriteResult
@@ -132,7 +136,7 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, num: int = 0, all
         tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
     return tweets
 
-def fetch_classified_tweets() -> [dict]:
+def fetch_all_classified_tweets() -> [dict]:
      """
      Search the database for classified tweets
      return tweets
@@ -142,13 +146,7 @@ def fetch_classified_tweets() -> [dict]:
      collection = get_database_collection()
      query = {'class': {'$exists': True}}
      tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
-     tweets = fetch_batch_of_unclassified_tweets(collection, num=num)
 
-     # add placeholder class for each tweet
-     updates = [x.copy() for x in tweets]
-     for update in updates:
-         update['class'] = 'being classified'
-     update_collection(collection, updates)
 
      return tweets
 
@@ -177,7 +175,8 @@ def fetch_for_manual_classify(collection: Collection, num: int) -> [dict]:
 def delete_retweets(collection: Collection) -> BulkWriteResult:
     """
     Purge the database of any retweets
-    :param collection:
+    DO NOT EDIT THIS FUNCTION. RISK TO DATABASE INTEGRITY
+    :param collection: a mongodb collection object
     :return: result from bulk write. Query for number deleted
     """
     commands = []
@@ -190,6 +189,38 @@ def delete_retweets(collection: Collection) -> BulkWriteResult:
     result = collection.bulk_write(commands, ordered=False)
     return result
 
+def delete_temporary_classifications(collection: Collection) -> BulkWriteResult:
+    """
+    Purge the database of any temporary classifications
+    DO NOT EDIT THIS FUNCTION. RISK TO DATABASE INTEGRITY
+    :param collection: a mongodb collection object
+    :return: results from bulk write
+    """
+    commands = []
+
+    query = {'class': 'being classified'}
+
+    documents = list(collection.find(query))
+    for document in documents:
+        commands.append(pymongo.UpdateOne({'id': document['id']}, {'$unset': {'class': 'being classified'}}))
+
+    result = collection.bulk_write(commands, ordered=False)
+    return result
+
+def download_database_backup(collection: Collection):
+    """
+    Downloads a new copy of the database and saves to the backups directory
+    :param collection: A mongodb collection object
+    """
+    filename = f"backup_{str(datetime.now().date())}"
+
+    results = list(collection.find({}))
+    stringified = [{str(k): str(v) for k,v in document.items() if k != "_id"} for document in results]
+
+    with open(f'../backups/{filename}', 'w') as outfile:
+        json.dump(stringified, outfile, indent=2)
+
+
 
 """Neither of the below comment blocks should remain after UI linkage"""
 
@@ -201,5 +232,8 @@ def delete_retweets(collection: Collection) -> BulkWriteResult:
 """ Use this to perform normal tweet fetch"""
 # collection = get_database_collection()
 # latest_id = fetch_latest_id(collection)
-# result = update_collection(collection, fetch_all_recent_tweets(latest_id))
+# result = update_collection(collection, fetch_all_recent_tweets_from_twitter(latest_id))
 # print(f'Inserted {result.upserted_count} new documents into the collection')
+
+# collection = get_database_collection()
+# download_database_backup(collection)

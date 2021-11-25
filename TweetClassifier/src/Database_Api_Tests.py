@@ -237,6 +237,41 @@ class TestDeleteRetweets(unittest.TestCase):
         self.assertEqual(result.deleted_count, 2)
         self.assertEqual(contents, self.mockTweets[2:])
 
+class TestDeleteTemporaryClassification(unittest.TestCase):
+    collection = mongomock.MongoClient().db.collection
+
+    mockTweets = [
+        {'id': 1, 'text': 'a'},
+        {'id': 2, 'text': 'c', 'class': 'being classified'},
+        {'id': 3, 'text': 'b', 'class': 'junk'},
+        {'id': 4, 'text': 'd', 'class': 'being classified'},
+    ]
+
+    # Insert values into collection before each test
+    def setUp(self):
+        self.collection.create_index('id', unique=True)
+        self.collection.insert_many(self.mockTweets)
+
+    # Remove all values from collection after each test
+    def tearDown(self):
+        self.collection.delete_many({})
+
+    def test_only_deletes_temporary_classifications(self):
+        results = Database_Api.delete_temporary_classifications(self.collection)
+
+        # this strips the _id field that mongo adds as a unique index
+        db_contents = self.collection.find({})
+        stripped = [{k:v for k, v in document.items() if k != '_id'} for document in db_contents]
+
+        expected = [
+            {'id': 1, 'text': 'a'},
+            {'id': 2, 'text': 'c'},
+            {'id': 3, 'text': 'b', 'class': 'junk'},
+            {'id': 4, 'text': 'd'},
+        ]
+
+        self.assertEqual(results.modified_count, 2)
+        self.assertEqual(stripped, expected)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
