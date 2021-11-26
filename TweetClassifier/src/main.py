@@ -41,7 +41,7 @@ CROSS_VALIDATORS = {}
 for classification in CATEGORIES.values():
     CROSS_VALIDATORS[classification] = CrossValidator(classification)
 
-TESTING_DATA_PERCENTAGE=0.4
+TESTING_DATA_PERCENTAGE = 0.4
 
 
 def strip_links(tweet):
@@ -97,6 +97,7 @@ def preprocess_data():
     # return x, y
     return x, y, feature_names
 
+
 # map the y values for each classification category to make them binary
 def split_data_by_class(train, test, feature_names):
     x_train, y_train = train[0], train[1]
@@ -108,6 +109,7 @@ def split_data_by_class(train, test, feature_names):
         BINARY_CLASSIFIERS[label].x_test = x_test
         BINARY_CLASSIFIERS[label].y_train = list(map(lambda y: 1 if y == label else 0, y_train))
         BINARY_CLASSIFIERS[label].y_test = list(map(lambda y: 1 if y == label else 0, y_test))
+
 
 def split_data_by_class_cv(x, y, feature_names):
     x = x
@@ -128,6 +130,7 @@ def train_model():
         BINARY_CLASSIFIERS[label].print_classification_report()
         BINARY_CLASSIFIERS[label].graph_pr_curve()
 
+
 def train_model_cv():
     x, y, feature_names = preprocess_data()
     split_data_by_class_cv(x, y, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
@@ -138,32 +141,34 @@ def train_model_cv():
         CROSS_VALIDATORS[label].print_classification_report()
         CROSS_VALIDATORS[label].graph_pr_curve()
 
+
 def train_model_bert():
     db_contents = fetch()
     data = [[tweet['text'], tweet['class']] for tweet in db_contents]
     df = pd.DataFrame(data, columns=['text', 'labels'])
 
-    # do label encoding for training
-    df['labels'] = df['labels'].astype('category')
-    code_mapping = ([{cat: code} for code, cat in enumerate(df['labels'].cat.categories)])
-    df['labels'] = df['labels'].cat.codes
-
     train_df, eval_df = Split(df, test_size=0.1)
 
-    model_args = ClassificationArgs(num_train_epochs=3, evaluate_during_training=True)
+    labels_map = {v: int(k)-1 for k, v in CATEGORIES.items()}
+    model_args = ClassificationArgs(
+        num_train_epochs=3,
+        evaluate_during_training=True,
+        labels_map=labels_map
+    )
 
     cuda_available = torch.cuda.is_available()
     model = ClassificationModel(
         'bert',
         'bert-base-cased',
-        num_labels=6,
         args=model_args,
         use_cuda=cuda_available,
+        num_labels=labels_map.keys().__len__()
     )
 
     global_step, training_details = model.train_model(
         train_df,
         eval_df=eval_df,
+        multi_label=True,
     )
     result, model_outputs, wrong_prediction = model.eval_model(eval_df)
 
@@ -174,7 +179,24 @@ def train_model_bert():
     print(wrong_prediction)
 
 
+def predict_bert(tweets: [str]):
+    cuda_available = torch.cuda.is_available()
+    try:
+        model = ClassificationModel(
+            "bert", "outputs/best_model",
+            use_cuda=cuda_available
+        )
+    except OSError as e:
+        print('The model does not exist')
+        return
+
+    result, model_outputs = model.predict(tweets)
+
+    print('all is good')
+    pass
+
+
 if __name__ == '__main__':
-    # manually_classify()
     # train_model_cv()
     train_model_bert()
+    predict_bert(["@epicgames my account got hacked please help"])
