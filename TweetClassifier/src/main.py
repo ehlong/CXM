@@ -1,3 +1,4 @@
+import sklearn.metrics
 import torch.cuda
 from Database_Api import fetch_all_classified_tweets as fetch
 import pandas as pd
@@ -149,7 +150,7 @@ def train_model_bert():
 
     train_df, eval_df = Split(df, test_size=0.1)
 
-    model_args = ClassificationArgs(num_train_epochs=1)
+    model_args = ClassificationArgs(num_train_epochs=3, evaluate_during_training=True)
 
     cuda_available = torch.cuda.is_available()
     model = ClassificationModel(
@@ -160,14 +161,20 @@ def train_model_bert():
         use_cuda=cuda_available,
     )
 
-    model.train_model(train_df)
+    global_step, training_details = model.train_model(
+        train_df,
+        eval_df=eval_df,
+    )
     result, model_outputs, wrong_prediction = model.eval_model(eval_df)
 
+    print(f'Global step: {global_step}')
+    print(f'training_details: {training_details}')
     print(result)
     print(model_outputs)
     print(wrong_prediction)
 
 
-# manually_classify()
-# train_model_cv()
-train_model_bert()
+if __name__ == '__main__':
+    # manually_classify()
+    # train_model_cv()
+    train_model_bert()
