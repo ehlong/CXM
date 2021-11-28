@@ -1,0 +1,48 @@
+<!-- This is where we will put our pretty stats -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="../styles/styles.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link href="../styles/classificationstyle.css" rel="stylesheet" />
+		<title>Statistics</title>
+		<!--
+      Whoever works on this page please check out the link below!
+      Also we should get the precision recall charts in here... 🤔
+
+      https://www.npmjs.com/package/@mongodb-js/charts-embed-dom -->
+	</head>
+	<body>
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			<a href="../index.html">Dashboard</a>
+			<a href="./statistics.html">Stats</a>
+			<div class="subnav">
+				<a class="subnavbtn">Tweets <i class="fa fa-caret-down"></i></a>
+				<div class="subnav-content">
+					<a href="./classification.html">Unclassified</a>
+					<a href="./positive.html">Positive</a>
+					<a href="./bugs.html">Bugs & Glitches</a>
+					<a href="./security.html">Security</a>
+					<a href="./store.html">Store</a>
+					<a href="./wants.html">Wants</a>
+					<a href="./junk.html">Junk</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="main">
+			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Stats! </h1>
+			<h3>Overview: </h3>
+			<p>todo: Grant wanted total tweets & date chart</p>
+			<iframe style="background: #ffffff; border: none; border-radius: 2px; box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2)" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=8b386824-adad-400d-89b4-34ca93222242&maxDataAge=3600&theme=light&autoRefresh=false"></iframe>
+			<h3>Here are our Precision Recall charts: </h3>
+			<p>Insert p-recall charts here!</p>
+		</div>
+
+		<script src="../src/openNav.js"></script>
+
+		<script src="../src/renderer.js"></script>
+	</body>
+</html>

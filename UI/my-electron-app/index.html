@@ -1,35 +1,56 @@
 <!DOCTYPE html>
 <html>
-<head>    
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="./styles.css" rel="stylesheet">
-<title>Welcome, Epic Games</title>
-<style>
-  #wrapper{
-    text-align: center;
-    padding: 20px;
-    border: 1px, solid, #657786;
-  }
-</style>
-</head>
-<body>
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="./index.html">Dashboard</a>
-  <a href="./classification.html">Classify Tweets</a>
-  <a href="./statistics.html">Stats</a>
-</div>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="./styles/styles.css" rel="stylesheet" />
+		<!-- This is for the carrot drop down. It comes from a specific font -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<title>Welcome, Epic Games</title>
+		<style></style>
+	</head>
+	<body>
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			<a href="./index.html">Dashboard</a>
+			<a href="./pages/statistics.html">Stats</a>
+			<div class="subnav">
+				<a class="subnavbtn">Tweets <i class="fa fa-caret-down"></i></a>
+				<div class="subnav-content">
+					<a href="./pages/classification.html">Unclassified</a>
+					<a href="./pages/positive.html">Positive</a>
+					<a href="./pages/bugs.html">Bugs & Glitches</a>
+					<a href="./pages/security.html">Security</a>
+					<a href="./pages/store.html">Store</a>
+					<a href="./pages/wants.html">Wants</a>
+					<a href="./pages/junk.html">Junk</a>
+				</div>
+			</div>
+		</div>
 
-<div id="main">
-  <h1>CXM Tool</h1>
-  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-  <div id="wrapper">
-    <img style="width: 100%;" src="./img/piechart.png"></img>
-  </div>
+		<div id="main">
+			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> CXM Tool</h1>
 
-</div>
-<script src="./src/openNav.js"></script>
-   
-<script src="./src/renderer.js"></script>
-</body>
-</html> 
+			<div id="wrapper">
+				<div id="main-content">
+					<h3>About</h3>
+					<p>Hello! We are a team of 6 computer science students attending Washington State University. Our project, Customer Experience Management Tool (CXM) allows a selected company to read tweets directed towards their company and to classify them. For this project, we selected Epic Games as the company. The categories of classification are currently: positive, bugs and glitches, security/hackers, store, wants, and lastly, junk (to store unreadable tweets). Deriving from the <a href="https://en.wikipedia.org/wiki/Bag-of-words_model">Bag of Words model</a>, and utilizing SciKitLearn, Joe and Elliott have developed a ML model. This project was created to show how customers will respond to certain company features and how we can train such data with a machine learning model.</p>
+					<h3>How to use</h3>
+					<ul>
+						<li> Open the navigation menu at the top left. </li>
+						<li> Under the menu, hover over "Tweets" and select "Unclassified". </li>
+						<li> This is where we will classify our tweets and retrain the model. </li>
+					</ul>
+					<br />
+				</div>
+				<h3>Here's what we have going on so far:</h3>
+				<!-- TODO: Make this responsive! 
+				https://www.w3schools.com/howto/howto_css_responsive_iframes.asp
+				-->
+				<iframe style="background: #ffffff; border: none; border-radius: 2px; box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2)" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=4b8c4a6d-26bf-46dd-9950-4f98ee0683d1&maxDataAge=3600&theme=light&autoRefresh=false"></iframe>
+			</div>
+		</div>
+		<script src="./src/openNav.js"></script>
+
+		<script src="./src/renderer.js"></script>
+	</body>
+</html>
