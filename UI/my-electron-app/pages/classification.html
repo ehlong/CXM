@@ -38,12 +38,9 @@
 
 		<div id="main">
 			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Unclassified Tweets</h1>
-			<div id="TweetBox" class="TweetBox">
-				<div id="Tweet#1">
-					<h2>TweetID</h2>
-					<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse risus eros, suscipit a eleifend ut, finibus eget ante. Aliquam erat."</p>
-				</div>
-				<div>
+			<br>
+				<!-- sliders to filter classes -->
+				<div style="text-align: center;">
 					<label class="switch">
 						<input type="checkbox" />
 						<span class="slider round"></span>
@@ -69,48 +66,138 @@
 						<span class="slider round"></span>
 					</label>
 					<label class="sub-button">
-						<input type="submit" value="send" />
+						<input  type="submit" value="Refresh" />
 					</label>
 				</div>
-				<section id="Tweet#2">
+			<div id="TweetBox" class="TweetBox">
+				<div id="Tweet#1">
+					<h2>TweetID</h2>
+					<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse risus eros, suscipit a eleifend ut, finibus eget ante. Aliquam erat."</p>
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification1" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification1" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification1" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification1" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification1" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification1" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#2">
 					<h2>Tweet2</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#3">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification2" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification2" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification2" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification2" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification2" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification2" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#3">
 					<h2>Tweet3</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#4">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification3" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification3" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification3" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification3" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification3" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification3" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#4">
 					<h2>Tweet4</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#5">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification4" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification4" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification4" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification4" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification4" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification4" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#5">
 					<h2>Tweet5</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#6">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification5" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification5" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification5" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification5" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification5" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification5" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#6">
 					<h2>Tweet6</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#7">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification6" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification6" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification6" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification6" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification6" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification6" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#7">
 					<h2>Tweet7</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#8">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification7" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification7" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification7" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification7" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification7" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification7" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#8">
 					<h2>Tweet8</h2>
 					<p>Example tweet</p>
-				</section>
-				<section id="Tweet#9">
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification8" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification8" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification8" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification8" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification8" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification8" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+				<br>
+				<div id="Tweet#9">
 					<h2>Tweet9</h2>
 					<p>Example tweet</p>
-				</section>
+				</div>
+				<div>
+					<input type="radio" id="positive" name="classification9" value="positive"><label for="positive">Positive</label> </input>
+					<input type="radio" id="bugs" name="classification9" value="bugs"><label for="bugs">Bugs and Glitches</label> </input>
+					<input type="radio" id="security" name="classification9" value="security"><label for="security">Security</label> </input>
+					<input type="radio" id="store" name="classification9" value="store"><label for="store">Store</label> </input>
+					<input type="radio" id="wants" name="classification9" value="wants"><label for="wants">Wants</label> </input>
+					<input type="radio" id="junk" name="classification9" value="junk"><label for="junk">Junk</label> </input>
+				</div>
+			</div>
+			<br>
+			<div style="text-align: center;">
+			<label class="sub-button1">
+				<input type="submit" value="Submit" />
+			</label>
 			</div>
 		</div>
-
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
 	</body>
-	<nav id="nav-tweets" class="section-nav">
+	<!-- <nav id="nav-tweets" class="section-nav">
 		<ul>
 			<li><a href="#main">All tweets</a></li>
 			<ul>
@@ -125,5 +212,5 @@
 				<li class=""><a href="#Tweet#9">Tweet#9</a></li>
 			</ul>
 		</ul>
-	</nav>
+	</nav> -->
 </html>
