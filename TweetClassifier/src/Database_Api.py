@@ -133,7 +133,7 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, num: int = 0, all
     if all:
         tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
     else:
-        tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
+        tweets = list(collection.find(query).sort('id', pymongo.DESCENDING).limit(num))
     return tweets
 
 def fetch_all_classified_tweets() -> [dict]:
