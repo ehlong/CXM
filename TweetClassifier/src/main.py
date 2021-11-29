@@ -1,5 +1,6 @@
-from Database_Api import fetch_classified_tweets as fetch
-import json
+import sklearn.metrics
+import torch.cuda
+from Database_Api import fetch_all_classified_tweets as fetch
 import pandas as pd
 import numpy as np
 import re
@@ -7,13 +8,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
 from BinaryClassifier import BinaryClassifier
 from CrossValidator import CrossValidator
+from simpletransformers.classification import ClassificationModel, ClassificationArgs
 import spacy
 import nltk
 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
-# TODO: Change preprocess_data for binClass to work
+# TODO: Change preprocess_data_train_test_split for binClass to work
 # allow printing full width in console
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -39,7 +41,7 @@ CROSS_VALIDATORS = {}
 for classification in CATEGORIES.values():
     CROSS_VALIDATORS[classification] = CrossValidator(classification)
 
-TESTING_DATA_PERCENTAGE=0.4
+TESTING_DATA_PERCENTAGE = 0.4
 
 
 def strip_links(tweet):
@@ -60,43 +62,18 @@ def lemmatize(tweet, tokenizer):
     return ' '.join(lemma_list)
 
 
-# grab data from json file and get ready for model
-def preprocess_data():
-    with open('../data/manually_classified_tweets.json') as file:
-        data = json.load(file)['tweets']
-    df = pd.DataFrame(data)
-    # turn text into bag of words vectors
-    # TODO: Move vectorizer after split when data set is bigger
-    tweets = df['text'].to_numpy()
-    tokenizer = spacy.load('en_core_web_sm')
-    # print tweets before processing
-    print('Tweets before and after processing: ')
-    print(f'Before: \n{tweets[:5]}\n')
-    tweets = np.vectorize(strip_links)(tweets)
-    tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
-    print(f'After: \n{tweets[:5]}\n')
-    vectorizer = CountVectorizer(ngram_range=(1, 1))
-    x = vectorizer.fit_transform(tweets).toarray()
-
-    y = df['class'].to_numpy()
-
-    # print out the number of times each word appears
-    df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names_out())
-    print("The 10 most common words are: ")
-    print(df.sum().sort_values(ascending=False)[:10])
+def preprocess_data_train_test_split():
+    x, y, feature_names = preprocess_data()
 
     # split and stratify so that train/test have similar target distribution
     x_train, x_test, y_train, y_test = Split(x, y, stratify=y, test_size=TESTING_DATA_PERCENTAGE)
-    feature_names = np.array(vectorizer.get_feature_names_out())
-    # return x, y
     return (x_train, y_train), (x_test, y_test), feature_names
 
 
-def preprocess_data_cv():
+def preprocess_data():
     data = fetch()
     df = pd.DataFrame(data)
     # turn text into bag of words vectors
-    # TODO: Move vectorizer after split when data set is bigger
     tweets = df['text'].to_numpy()
     tokenizer = spacy.load('en_core_web_sm')
     # print tweets before processing
@@ -120,6 +97,7 @@ def preprocess_data_cv():
     # return x, y
     return x, y, feature_names
 
+
 # map the y values for each classification category to make them binary
 def split_data_by_class(train, test, feature_names):
     x_train, y_train = train[0], train[1]
@@ -132,6 +110,7 @@ def split_data_by_class(train, test, feature_names):
         BINARY_CLASSIFIERS[label].y_train = list(map(lambda y: 1 if y == label else 0, y_train))
         BINARY_CLASSIFIERS[label].y_test = list(map(lambda y: 1 if y == label else 0, y_test))
 
+
 def split_data_by_class_cv(x, y, feature_names):
     x = x
     y = y
@@ -142,7 +121,7 @@ def split_data_by_class_cv(x, y, feature_names):
 
 
 def train_model():
-    train, test, feature_names = preprocess_data()
+    train, test, feature_names = preprocess_data_train_test_split()
     split_data_by_class(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
     for label in CATEGORIES.values():
@@ -151,8 +130,9 @@ def train_model():
         BINARY_CLASSIFIERS[label].print_classification_report()
         BINARY_CLASSIFIERS[label].graph_pr_curve()
 
+
 def train_model_cv():
-    x, y, feature_names = preprocess_data_cv()
+    x, y, feature_names = preprocess_data()
     split_data_by_class_cv(x, y, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
     for label in CATEGORIES.values():
@@ -161,5 +141,62 @@ def train_model_cv():
         CROSS_VALIDATORS[label].print_classification_report()
         CROSS_VALIDATORS[label].graph_pr_curve()
 
-# manually_classify()
-train_model_cv()
+
+def train_model_bert():
+    db_contents = fetch()
+    data = [[tweet['text'], tweet['class']] for tweet in db_contents]
+    df = pd.DataFrame(data, columns=['text', 'labels'])
+
+    train_df, eval_df = Split(df, test_size=0.1)
+
+    labels_map = {v: int(k)-1 for k, v in CATEGORIES.items()}
+    model_args = ClassificationArgs(
+        num_train_epochs=3,
+        evaluate_during_training=True,
+        labels_map=labels_map
+    )
+
+    cuda_available = torch.cuda.is_available()
+    model = ClassificationModel(
+        'bert',
+        'bert-base-cased',
+        args=model_args,
+        use_cuda=cuda_available,
+        num_labels=labels_map.keys().__len__()
+    )
+
+    global_step, training_details = model.train_model(
+        train_df,
+        eval_df=eval_df,
+        multi_label=True,
+    )
+    result, model_outputs, wrong_prediction = model.eval_model(eval_df)
+
+    print(f'Global step: {global_step}')
+    print(f'training_details: {training_details}')
+    print(result)
+    print(model_outputs)
+    print(wrong_prediction)
+
+
+def predict_bert(tweets: [str]):
+    cuda_available = torch.cuda.is_available()
+    try:
+        model = ClassificationModel(
+            "bert", "outputs/best_model",
+            use_cuda=cuda_available
+        )
+    except OSError as e:
+        print('The model does not exist')
+        return
+
+    result, model_outputs = model.predict(tweets)
+
+    print('all is good')
+    pass
+
+
+if __name__ == '__main__':
+    # train_model_cv()
+    train_model_bert()
+    predict_bert(["@epicgames my account got hacked please help"])
