@@ -1,3 +1,4 @@
+// parses the data from a get request for unclassified tweets
 function get_tweet_callback(data) {
   var tweets = JSON.parse(data)
   console.log(tweets)

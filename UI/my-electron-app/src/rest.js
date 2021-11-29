@@ -1,5 +1,6 @@
-//https://stackoverflow.com/questions/247483/http-get-request-in-javascript
+// https://stackoverflow.com/questions/247483/http-get-request-in-javascript
 
+// asynchronous get request to endpoint (theUrl), invoked on callback
 function httpGetAsync(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
