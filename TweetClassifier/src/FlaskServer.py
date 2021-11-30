@@ -5,8 +5,8 @@ import Database_Api
 app = Flask(__name__)
 
 
-@app.route('/unclassified_tweets/')
-def retrieve_unclassified():
+@app.route('/unclassified/<int:num>/')
+def retrieve_unclassified(num):
     """
     Function representing the /unclassified_tweets/ endpoint.
     Pulls tweets from the database using the Database_API
@@ -23,7 +23,7 @@ def retrieve_unclassified():
     except FileNotFoundError:
         return "Unable to open database key."
 
-    tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, 0, 9)
+    tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, num)
     ret_val = {}
     for i, tweet in enumerate(tweets):
         ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date']}

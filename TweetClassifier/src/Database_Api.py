@@ -51,13 +51,22 @@ def fetch_all_recent_tweets_from_twitter(latest_id: str) -> [dict]:
     tweets = []
     next_token = 'first_loop'
     while next_token is not None:
+        query = 'to:EpicGames'
 
-        if next_token == 'first_loop':
-            result = client.search_recent_tweets(query='to:EpicGames', max_results=100,
-                                                 since_id=latest_id, tweet_fields=['created_at'])
-        else:
-            result = client.search_recent_tweets(query='to:EpicGames', max_results=100, since_id=latest_id,
-                                                 tweet_fields=['created_at'], next_token=next_token)
+        try:
+            if next_token == 'first_loop':
+                result = client.search_recent_tweets(query=query, max_results=100,
+                                                     since_id=latest_id, tweet_fields=['created_at'])
+            else:
+                result = client.search_recent_tweets(query=query, max_results=100, since_id=latest_id,
+                                                     tweet_fields=['created_at'], next_token=next_token)
+        except tweepy.errors.BadRequest:
+            if next_token == 'first_loop':
+                print('Last tweet in DB is from more than 7 days ago, searching last 7 days instead')
+                result = client.search_recent_tweets(query=query, max_results=100, tweet_fields=['created_at'])
+            else:
+                result = client.search_recent_tweets(query=query, max_results=100, tweet_fields=['created_at'],
+                                                     next_token=next_token)
 
         tweets.extend(
             {
@@ -133,7 +142,7 @@ def fetch_batch_of_unclassified_tweets(collection: Collection, num: int = 0, all
     if all:
         tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
     else:
-        tweets = list(collection.find(query).sort('id', pymongo.ASCENDING).limit(num))
+        tweets = list(collection.find(query).sort('id', pymongo.DESCENDING).limit(num))
     return tweets
 
 def fetch_all_classified_tweets() -> [dict]:
@@ -230,10 +239,10 @@ def download_database_backup(collection: Collection):
 # print(f'Deleted {result.deleted_count} retweets from the database')
 
 """ Use this to perform normal tweet fetch"""
-# collection = get_database_collection()
-# latest_id = fetch_latest_id(collection)
-# result = update_collection(collection, fetch_all_recent_tweets_from_twitter(latest_id))
-# print(f'Inserted {result.upserted_count} new documents into the collection')
+collection = get_database_collection()
+latest_id = fetch_latest_id(collection)
+result = update_collection(collection, fetch_all_recent_tweets_from_twitter(latest_id))
+print(f'Inserted {result.upserted_count} new documents into the collection')
 
 # collection = get_database_collection()
 # download_database_backup(collection)
