@@ -12,9 +12,6 @@ class CrossValidator:
         self.x = None
         self.y = None
         self.y_pred = None
-        #self.precision = None
-        #self.recall = None
-        #self.thresholds = None
         self.feature_names = None
 
     def fit_predict(self):
