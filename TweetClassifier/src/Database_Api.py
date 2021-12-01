@@ -125,8 +125,8 @@ def update_collection(db_collection: Collection, new_values: [dict]) -> BulkWrit
             fields['$set']['trained'] = document['trained']
         requests.append(pymongo.UpdateOne({'id': document['id']}, fields, upsert=True))
 
-    validate = db_collection.bulk_write(requests, ordered=False)
-    return validate
+    result = db_collection.bulk_write(requests, ordered=False)
+    return result
 
 
 def fetch_batch_of_unclassified_tweets(db_collection: Collection, num: int = 0, total: bool = False) -> [dict]:
