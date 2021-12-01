@@ -17,6 +17,7 @@ from nltk.corpus import stopwords
 
 # TODO: Change preprocess_data_train_test_split for binClass to work
 # TODO: Make a dedicated BERT file
+# allow full printing within the console
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
@@ -112,8 +113,6 @@ def split_data_by_class(train, test, feature_names):
 
 
 def split_data_by_class_cv(x, y, feature_names):
-    # x = x
-    # y = y
     for label in CATEGORIES.values():
         CROSS_VALIDATORS[label].feature_names = feature_names
         CROSS_VALIDATORS[label].x = x
@@ -194,7 +193,7 @@ def retrain_bert():
     ### TESTING BELOW ###
     for tweet in tweets:
         tweet['trained'] = 1
-    collection = get_database_collection
+    collection = get_database_collection()
     update_collection(collection, tweets)
     data = [[tweet['text'], tweet['class']] for tweet in db_contents]
     df = pd.DataFrame(data, columns=['text', 'labels'])
