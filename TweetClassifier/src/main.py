@@ -117,7 +117,7 @@ def split_data_by_class_cv(x, y, feature_names):
     for label in CATEGORIES.values():
         CROSS_VALIDATORS[label].feature_names = feature_names
         CROSS_VALIDATORS[label].x = x
-        CROSS_VALIDATORS[label].y = list(map(lambda o: 1 if o == label else 0, y))
+        CROSS_VALIDATORS[label].y = list(map(lambda z: 1 if z == label else 0, y))
 
 
 def train_model():
