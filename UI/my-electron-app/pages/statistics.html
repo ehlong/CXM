@@ -32,13 +32,48 @@
 			</div>
 		</div>
 
-		<div id="main">
-			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Stats! </h1>
-			<h3>Overview: </h3>
-			<p>todo: Grant wanted total tweets & date chart</p>
+		<div style="text-align: center" id="main">
+			<h1 style="text-align: left"><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Stats! </h1>
+			<h2>Overview: </h3>
+			<!-- <p>todo: Grant wanted total tweets & date chart, we will get this from db team</p> -->
 			<iframe style="background: #ffffff; border: none; border-radius: 2px; box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2)" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=8b386824-adad-400d-89b4-34ca93222242&maxDataAge=3600&theme=light&autoRefresh=false"></iframe>
-			<h3>Here are our Precision Recall charts: </h3>
-			<p>Insert p-recall charts here!</p>
+			<h2>Here are our Precision Recall charts: </h3>
+			<div>
+				<span>
+					<h3>Positive</h3>
+					<img src="../img/pr_curve_positive.png" />
+				</span>
+			</div>
+			<div>
+				<span>
+					<h3>Bugs and Glitches</h3>
+					<img src="../img/pr_curve_bugs.png" />
+				</span>
+			</div>
+			<div>
+				<span>
+					<h3>Security</h3>
+					<img src="../img/pr_curves_security.png" />
+				</span>
+			</div>
+			<div>
+				<span>
+					<h3>Store</h3>
+					<img src="../img/pr_curves_store.png" />
+				</span>
+			</div>
+			<div>
+				<span>
+					<h3>Wants</h3>
+					<img src="../img/pr_curves_wants.png" />
+				</span>
+			</div>
+			<div>
+				<span>
+					<h3>Junk</h3>
+					<img src="../img/pr_curves_junk.png" />
+				</span>
+			</div>
 		</div>
 
 		<script src="../src/openNav.js"></script>

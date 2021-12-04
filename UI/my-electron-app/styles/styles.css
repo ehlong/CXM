@@ -106,7 +106,8 @@ body {
 
 /* SUBMIT BUTTON */
 input[type="submit"] {
-	width: 60px;
+	padding-top: 10px;
+	width: 100px;
 	height: 34px;
 	padding: 5px 15px;
 	background: #ccc;
@@ -117,7 +118,8 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-	background: lime;
+	color: white;
+	background: lightblue;
 }
 
 /* ROUNDED SLIDERS TOGGLER THINGIES */

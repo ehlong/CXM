@@ -25,7 +25,7 @@ def retrieve_unclassified(num):
 
     tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, num)
     ret_val = {}
-    for i, tweet in enumerate(tweets):
+    for tweet in enumerate(tweets):
         ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date']}
     return ret_val
 

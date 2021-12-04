@@ -165,7 +165,7 @@ class TestFetchUnclassifiedTweets(unittest.TestCase):
 
     def test_returns_all_tweets_when_all_flag_is_true(self):
         self.collection.insert_many(unclassified)
-        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, all=True)
+        fetched = Database_Api.fetch_batch_of_unclassified_tweets(self.collection, total=True)
         self.assertEqual(fetched.__len__(), unclassified.__len__())
 
     def test_returns_lowest_number_ids_first(self):

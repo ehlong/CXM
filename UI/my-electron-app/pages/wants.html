@@ -6,7 +6,7 @@
 	// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
 	// httpGetAsync is in rest.js
 	// get_tweet_callback is in classification.js
-	// the endpoint is run by the FlaskServer.py file
+	// the endpoint is run by the Flask_Server.py file
 	httpGetAsync("http://127.0.0.1:5000/unclassified_tweets/", get_tweet_callback);
 </script>
 <html>
@@ -81,7 +81,7 @@
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
 	</body>
-	<nav id="nav-tweets" class="section-nav">
+	<!-- <nav id="nav-tweets" class="section-nav">
 		<ul>
 			<li><a href="#main">All tweets</a></li>
 			<ul>
@@ -96,5 +96,5 @@
 				<li class=""><a href="#Tweet#9">Tweet#9</a></li>
 			</ul>
 		</ul>
-	</nav>
+	</nav> -->
 </html>
