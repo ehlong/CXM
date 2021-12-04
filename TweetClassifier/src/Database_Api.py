@@ -235,10 +235,10 @@ def download_database_backup(db_collection: Collection):
 # print(f'Deleted {result.deleted_count} retweets from the database')
 
 """ Use this to perform normal tweet fetch"""
-collection = get_database_collection()
-recent_id = fetch_latest_id(collection)
-collection_result = update_collection(collection, fetch_all_recent_tweets_from_twitter(recent_id))
-print(f'Inserted {collection_result.upserted_count} new documents into the collection')
+# collection = get_database_collection()
+# recent_id = fetch_latest_id(collection)
+# collection_result = update_collection(collection, fetch_all_recent_tweets_from_twitter(recent_id))
+# print(f'Inserted {collection_result.upserted_count} new documents into the collection')
 
 # collection = get_database_collection()
 # download_database_backup(collection)

@@ -25,8 +25,17 @@ def retrieve_unclassified(num):
 
     tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, num)
     ret_val = {}
-    for tweet in enumerate(tweets):
+    for tweet in tweets:
         ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date']}
+    return ret_val
+
+
+@app.route('/classified/')
+def retrieve_classified():
+    tweets = Database_Api.fetch_all_classified_tweets()
+    ret_val = {}
+    for tweet in tweets:
+        ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date'], 'class': tweet['class']}
     return ret_val
 
 
