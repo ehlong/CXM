@@ -16,7 +16,6 @@ function get_tweet_callback(data) {
       "<p>" + tweets[key]['text'] + "</p>";
       unclassified_results.push(key); 
   }
-
 }
 
 var results;
@@ -101,8 +100,7 @@ function put_tweets_json () {
 
     //If user didnt check all the boxes then error.
     if(ids.length != values.length) { 
-        console.log("ERROR"); 
-
+        alert("Please input all values before committing");
     }
     else { 
         for (var i =0; i< ids.length;i++ ) {

@@ -157,7 +157,7 @@ def fetch_all_classified_tweets() -> [dict]:
     """
     db_collection = get_database_collection()
     query = {'class': {'$exists': True}}
-    tweets = list(db_collection.find(query).sort('id', pymongo.ASCENDING))
+    tweets = list(db_collection.find(query).sort('id', pymongo.DESCENDING))
 
     return tweets
 
