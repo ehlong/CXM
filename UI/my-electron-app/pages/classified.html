@@ -1,17 +1,17 @@
 <!-- This is where we will manually classify our tweets -->
 <!DOCTYPE html>
-<script src="../src/classification.js"></script>
-<script src="../src/rest.js"></script>
-<script>
-	// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
-	// httpGetAsync is in rest.js
-	// get_tweet_callback is in classification.js
-	// the endpoint is run by the Flask_Server.py file
-	httpGetAsync("http://127.0.0.1:5000/unclassified/9", get_tweet_callback);
-</script>
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="../src/classification.js"></script>
+		<script src="../src/rest.js"></script>
+		<script>
+			// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
+			// httpGetAsync is in rest.js
+			// get_tweet_callback is in classification.js
+			// the endpoint is run by the Flask_Server.py file
+			httpGetAsync("http://127.0.0.1:5000/classified", get_tweet_class_callback);
+		</script>
 		<link href="../styles/styles.css" rel="stylesheet" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 		<link href="../styles/classificationstyle.css" rel="stylesheet" />
@@ -25,49 +25,46 @@
 			<div class="subnav">
 				<a class="subnavbtn">Tweets <i class="fa fa-caret-down"></i></a>
 				<div class="subnav-content">
-					<a href="javascript:void(0)">Unclassified</a>
+					<a href="./unclassified.html">Unclassified</a>
 					<a href="./classified.html">Classified</a>
 				</div>
 			</div>
 		</div>
 
 		<div id="main">
-			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Unclassified Tweets</h1>
+			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Classified Tweets</h1>
 			<br />
 			<!-- sliders to filter classes -->
 			<div style="text-align: center">
-				<label class="switch">
-					<input type="checkbox" />
+				<label class="switch positive">
+					<input type="checkbox"  name="" id="positive" value="positive" onchange="filter_json(this)"/>
+					<span style="width:auto;" class="slider round">positive</span>
+				</label>
+				<label class="switch bugs">
+					<input type="checkbox"  name="" id="bugs" value="bugs/glitches" onchange="filter_json(this)" />
 					<span class="slider round"></span>
 				</label>
-				<label class="switch">
-					<input type="checkbox" />
+				<label class="switch security">
+					<input type="checkbox"  name="" id="security" value="security" onchange="filter_json(this)" />
 					<span class="slider round"></span>
 				</label>
-				<label class="switch">
-					<input type="checkbox" />
+				<label class="switch store">
+					<input type="checkbox"  name="" id="store" value="store" onchange="filter_json(this)" />
 					<span class="slider round"></span>
 				</label>
-				<label class="switch">
-					<input type="checkbox" />
+				<label class="switch wants">
+					<input type="checkbox"  name="" id="wants" value="wants" onchange="filter_json(this)" />
 					<span class="slider round"></span>
 				</label>
-				<label class="switch">
-					<input type="checkbox" />
+				<label class="switch junk">
+					<input type="checkbox"  name="" id="junk" value="junk" onchange="filter_json(this)" />
 					<span class="slider round"></span>
-				</label>
-				<label class="switch">
-					<input type="checkbox" />
-					<span class="slider round"></span>
-				</label>
-				<label class="sub-button">
-					<input type="submit" value="Refresh" />
 				</label>
 			</div>
 			<div id="TweetBox" class="TweetBox">
 				<div id="Tweet#1">
 					<h2>TweetID</h2>
-					<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse risus eros, suscipit a eleifend ut, finibus eget ante. Aliquam erat."</p>
+					<p>Example tweet</p>
 				</div>
 				<br />
 				<div id="Tweet#2">
@@ -111,12 +108,8 @@
 				</div>
 			</div>
 			<br />
-			<div style="text-align: center">
-				<label class="sub-button1">
-					<input type="submit" value="Submit" />
-				</label>
-			</div>
 		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
 	</body>
