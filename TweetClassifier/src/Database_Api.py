@@ -5,6 +5,7 @@ from pymongo.results import BulkWriteResult
 import tweepy
 import yaml
 from datetime import datetime
+import dateutil.parser
 
 
 def connect() -> tweepy.Client:
@@ -115,7 +116,8 @@ def update_collection(db_collection: Collection, new_values: [dict]) -> BulkWrit
             '$set': {
                 'id': document['id'],
                 'text': document['text'],
-                'date': document['date'],
+                'date': document['date'] if type(document['date']) == datetime
+                else dateutil.parser.parse(document['date'])
             }
         }
         if 'class' in document:
@@ -146,6 +148,7 @@ def fetch_batch_of_unclassified_tweets(db_collection: Collection, num: int = 0, 
         tweets = list(db_collection.find(query).sort('id', pymongo.DESCENDING).limit(num))
     return tweets
 
+
 def fetch_all_classified_tweets() -> [dict]:
     """
     Search the database for classified tweets
@@ -157,6 +160,7 @@ def fetch_all_classified_tweets() -> [dict]:
     tweets = list(db_collection.find(query).sort('id', pymongo.ASCENDING))
 
     return tweets
+
 
 def fetch_for_manual_classify(db_collection: Collection, num: int) -> [dict]:
     """
@@ -177,6 +181,7 @@ def fetch_for_manual_classify(db_collection: Collection, num: int) -> [dict]:
 
     return tweets
 
+
 def delete_retweets(db_collection: Collection) -> BulkWriteResult:
     """
     Purge the database of any retweets
@@ -193,6 +198,7 @@ def delete_retweets(db_collection: Collection) -> BulkWriteResult:
 
     validate = db_collection.bulk_write(commands, ordered=False)
     return validate
+
 
 def delete_temporary_classifications(db_collection: Collection) -> BulkWriteResult:
     """
@@ -212,6 +218,7 @@ def delete_temporary_classifications(db_collection: Collection) -> BulkWriteResu
     validate = db_collection.bulk_write(commands, ordered=False)
     return validate
 
+
 def download_database_backup(db_collection: Collection):
     """
     Downloads a new copy of the database and saves to the backups directory
@@ -220,11 +227,18 @@ def download_database_backup(db_collection: Collection):
     filename = f"backup_{str(datetime.now().date())}"
 
     results = list(db_collection.find({}))
-    stringified = [{str(k): str(v) for k,v in document.items() if k != "_id"} for document in results]
+    stringified = [{str(k): str(v) for k, v in document.items() if k != "_id"} for document in results]
 
     with open(f'../backups/{filename}', 'w') as outfile:
         json.dump(stringified, outfile, indent=2)
 
+
+def update_entire_database_to_dates():
+    collection = get_database_collection()
+    tweets = list(collection.find({}))
+    results = update_collection(collection, tweets)
+    print(results.matched_count)
+    print(results.modified_count)
 
 
 """Neither of the below comment blocks should remain after UI linkage"""
@@ -242,3 +256,4 @@ def download_database_backup(db_collection: Collection):
 
 # collection = get_database_collection()
 # download_database_backup(collection)
+
