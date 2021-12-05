@@ -38,7 +38,6 @@ function get_tweet_class_callback(data) {
 function filter_json(data){
     let filteredResults = [];
     if($(data).is(":checked")){
-        alert(data.value + " checked");
         filteredResults = Object.values(results)
             .filter(
                 function(result){
@@ -58,5 +57,19 @@ function filter_json(data){
                   "<p>class: " + filteredResults[key]['class'] + "</p>";
         }
 
+    }
+    if(!$(data).is(":checked")){
+        var i = 0;
+        for(var key in results) {
+            let elementId = "Tweet#" + (++i).toString();
+            if(i === 10){
+                break;
+            }
+            document.getElementById(elementId).innerHTML =
+                "<h2>Tweet ID: " + key + "</h2>\n" +
+                "<p>Date: " + results[key]['date'] + "</p>\n" +
+                "<p>" + results[key]['text'] + "</p>\n" +
+                "<p>class: " + results[key]['class'] + "</p>";
+        }
     }
 }
