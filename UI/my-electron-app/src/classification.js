@@ -22,7 +22,7 @@ function get_tweet_class_callback(data) {
   var i = 0;
   for(var key in tweets) {
       let elementId = "Tweet#" + (++i).toString();
-      if(i === 10){
+      if(i === 26){
           break;
       }
       document.getElementById(elementId).innerHTML =
@@ -47,11 +47,11 @@ function filter_json(data){
         var i = 0;
         for(var key in filteredResults) {
             let elementId = "Tweet#" + (++i).toString();
-            if(i === 10){
+            if(i === 26){
                 break;
             }
             document.getElementById(elementId).innerHTML =
-                  "<h2>Tweet ID: " + key + "</h2>\n" +
+                  "<h2>Tweet: " + "</h2>\n" +
                   "<p>Date: " + filteredResults[key]['date'] + "</p>\n" +
                   "<p>" + filteredResults[key]['text'] + "</p>\n" +
                   "<p>class: " + filteredResults[key]['class'] + "</p>";
@@ -62,7 +62,7 @@ function filter_json(data){
         var i = 0;
         for(var key in results) {
             let elementId = "Tweet#" + (++i).toString();
-            if(i === 10){
+            if(i === 26){
                 break;
             }
             document.getElementById(elementId).innerHTML =
