@@ -1,3 +1,5 @@
+import datetime
+import dateutil
 import unittest
 import mongomock
 import Database_Api
@@ -114,6 +116,7 @@ class TestUpdateCollection(unittest.TestCase):
                 self.assertEqual('class' in content, False,
                                  msg='Document update failed - Added class to wrong documents')
 
+
     def test_insert_new_bulk_documents_inserts_correct_number(self):
         Database_Api.update_collection(self.collection, unclassified)
 
@@ -131,8 +134,12 @@ class TestUpdateCollection(unittest.TestCase):
                              msg='Document id does not match documents inserted')
             self.assertEqual(document['text'], unclassified[i]['text'],
                              msg='Document text does not match documents inserted')
-            self.assertEqual(document['date'], unclassified[i]['date'],
+            self.assertEqual(document['date'], dateutil.parser.parse(unclassified[i]['date'], ignoretz=True),
                              msg='Document date does not match documents inserted')
+
+    def test_update_does_not_error_on_existing_datetime_object(self):
+        tweet = {'id': 1, 'text': 'a', 'date': datetime.datetime(2021, 10, 31)}
+        Database_Api.update_collection(self.collection, [tweet])
 
 
 class TestFetchUnclassifiedTweets(unittest.TestCase):
