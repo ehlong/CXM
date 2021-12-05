@@ -1,6 +1,7 @@
 # Environments
 .env
 .venv
+testenv/
 env/
 venv/
 ENV/

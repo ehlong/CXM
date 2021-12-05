@@ -1,0 +1,132 @@
+<!-- This is where we will manually classify our tweets -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="../src/classification.js"></script>
+		<script src="../src/rest.js"></script>
+		<script>
+			// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
+			// httpGetAsync is in rest.js
+			// get_tweet_callback is in classification.js
+			// the endpoint is run by the Flask_Server.py file
+			httpGetAsync("http://127.0.0.1:5000/classified", get_tweet_class_callback);
+		</script>
+		<link href="../styles/styles.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link href="../styles/classificationstyle.css" rel="stylesheet" />
+		<title>Classified Tweets</title>
+	</head>
+	<body>
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			<a href="../index.html">Dashboard</a>
+			<a href="./statistics.html">Stats</a>
+			<div class="subnav">
+				<a class="subnavbtn">Tweets <i class="fa fa-caret-down"></i></a>
+				<div class="subnav-content">
+					<a href="./unclassified.html">Unclassified</a>
+					<a href="./classified.html">Classified</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="main">
+			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Classified Tweets</h1>
+			<br />
+			<!-- sliders to filter classes -->
+			<div style="text-align: center">
+				<label class="switch positive">
+					<input type="checkbox"  name="" id="positive" value="positive" onchange="filter_json(this)"/>
+					<span style="width:auto;" class="slider round">positive</span>
+				</label>
+				<label class="switch bugs">
+					<input type="checkbox"  name="" id="bugs" value="bugs/glitches" onchange="filter_json(this)" />
+					<span class="slider round"></span>
+				</label>
+				<label class="switch security">
+					<input type="checkbox"  name="" id="security" value="security" onchange="filter_json(this)" />
+					<span class="slider round"></span>
+				</label>
+				<label class="switch store">
+					<input type="checkbox"  name="" id="store" value="store" onchange="filter_json(this)" />
+					<span class="slider round"></span>
+				</label>
+				<label class="switch wants">
+					<input type="checkbox"  name="" id="wants" value="wants" onchange="filter_json(this)" />
+					<span class="slider round"></span>
+				</label>
+				<label class="switch junk">
+					<input type="checkbox"  name="" id="junk" value="junk" onchange="filter_json(this)" />
+					<span class="slider round"></span>
+				</label>
+			</div>
+			<div id="TweetBox" class="TweetBox">
+				<div id="Tweet#1">
+					<h2>TweetID</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#2">
+					<h2>Tweet2</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#3">
+					<h2>Tweet3</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#4">
+					<h2>Tweet4</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#5">
+					<h2>Tweet5</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#6">
+					<h2>Tweet6</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#7">
+					<h2>Tweet7</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#8">
+					<h2>Tweet8</h2>
+					<p>Example tweet</p>
+				</div>
+				<br />
+				<div id="Tweet#9">
+					<h2>Tweet9</h2>
+					<p>Example tweet</p>
+				</div>
+			</div>
+			<br />
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="../src/openNav.js"></script>
+		<script src="../src/renderer.js"></script>
+	</body>
+	<!-- <nav id="nav-tweets" class="section-nav">
+		<ul>
+			<li><a href="#main">All tweets</a></li>
+			<ul>
+				<li class=""><a href="#Tweet#1">Tweet#1</a></li>
+				<li class=""><a href="#Tweet#2">Tweet#2</a></li>
+				<li class=""><a href="#Tweet#3">Tweet#3</a></li>
+				<li class=""><a href="#Tweet#4">Tweet#4</a></li>
+				<li class=""><a href="#Tweet#5">Tweet#5</a></li>
+				<li class=""><a href="#Tweet#6">Tweet#6</a></li>
+				<li class=""><a href="#Tweet#7">Tweet#7</a></li>
+				<li class=""><a href="#Tweet#8">Tweet#8</a></li>
+				<li class=""><a href="#Tweet#9">Tweet#9</a></li>
+			</ul>
+		</ul>
+	</nav> -->
+</html>
