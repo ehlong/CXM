@@ -8,6 +8,13 @@
 	// get_tweet_callback is in classification.js
 	// the endpoint is run by the Flask_Server.py file
 	httpGetAsync("http://127.0.0.1:5000/unclassified/9", get_tweet_callback);
+
+	//example of put being used
+	var data = JSON.stringify({
+		'id': 1234,
+		'class': 'cool dude'
+	})
+	httpPutAsync("http://127.0.0.1:5000/unclassified/", data)
 </script>
 <html>
 	<head>

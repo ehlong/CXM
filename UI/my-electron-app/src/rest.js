@@ -10,3 +10,10 @@ function httpGetAsync(theUrl, callback) {
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
     xmlHttp.send(null);
 }
+
+function httpPutAsync(theUrl, data) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("PUT", theUrl, true); // true for asynchronous
+    xmlHttp.setRequestHeader('content-type', 'application/json')
+    xmlHttp.send(data);
+}
