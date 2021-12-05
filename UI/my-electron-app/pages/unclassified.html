@@ -1,4 +1,5 @@
 <!-- This is where we will manually classify our tweets -->
+<!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal -->
 <!DOCTYPE html>
 <script src="../src/classification.js"></script>
 <script src="../src/rest.js"></script>
@@ -35,6 +36,19 @@
 			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Unclassified Tweets</h1>
 			<br>
 			<div id="TweetBox" class="TweetBox">
+				<div style="text-align: center;">
+					<label class="sub-button1">
+
+						<!-- onclick needs to do something here, mainly grab new tweets that are not classified. -->
+						<input type="submit" value="Fetch New Tweets" onclick="" />
+					</label>
+					<label class="sub-button1">
+
+						<!-- onclick needs to do something here, mainly grab new tweets that are not classified. -->
+						<input type="submit" value="Infer All Tweets" onclick="" />
+					</label>
+					
+				</div>
 				<div id="Tweet#1">
 					<h2>TweetID</h2>
 					<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse risus eros, suscipit a eleifend ut, finibus eget ante. Aliquam erat."</p>
@@ -155,27 +169,28 @@
 			<br>
 			<div style="text-align: center;">
 			<label class="sub-button1">
-				<input type="submit" value="Submit" />
+				<input id= "submitButton" type="submit" value="Commit All Classsified" />
 			</label>
+				<div id="myModal" class="modal">
+
+					<!-- Modal content -->
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<h2>Want to Classify more Tweets??</h2>
+						<div style="text-align: center;">
+							<label class="sub-button1">
+								<input type="submit" value="Yes" onclick="" />
+							</label>
+							<label class="sub-button1">
+								<input type="submit" value="No" onclick="" />
+							</label>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
+		<script src="../src/modal.js"></script>
 	</body>
-	<!-- <nav id="nav-tweets" class="section-nav">
-		<ul>
-			<li><a href="#main">All tweets</a></li>
-			<ul>
-				<li class=""><a href="#Tweet#1">Tweet#1</a></li>
-				<li class=""><a href="#Tweet#2">Tweet#2</a></li>
-				<li class=""><a href="#Tweet#3">Tweet#3</a></li>
-				<li class=""><a href="#Tweet#4">Tweet#4</a></li>
-				<li class=""><a href="#Tweet#5">Tweet#5</a></li>
-				<li class=""><a href="#Tweet#6">Tweet#6</a></li>
-				<li class=""><a href="#Tweet#7">Tweet#7</a></li>
-				<li class=""><a href="#Tweet#8">Tweet#8</a></li>
-				<li class=""><a href="#Tweet#9">Tweet#9</a></li>
-			</ul>
-		</ul>
-	</nav> -->
 </html>
