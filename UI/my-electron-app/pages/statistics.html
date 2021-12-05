@@ -29,10 +29,15 @@
 
 		<div style="text-align: center" id="main">
 			<h1 style="text-align: left"><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Stats! </h1>
-			<h2>Overview: </h3>
-			<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=504ea727-c995-46c6-a21e-933c5116dc23&maxDataAge=1800&theme=light&autoRefresh=true"></iframe>
-			<iframe style="background: #ffffff; border: none; border-radius: 2px; box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2)" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=8b386824-adad-400d-89b4-34ca93222242&maxDataAge=3600&theme=light&autoRefresh=false"></iframe>
-			<h2>Here are our Precision Recall charts: </h3>
+			<h2>Overview: </h2>
+			<div class="iframe-container">
+				<iframe class="responsive-iframe" style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=504ea727-c995-46c6-a21e-933c5116dc23&maxDataAge=1800&theme=light&autoRefresh=true"></iframe>
+			</div>
+			<br>
+			<div class="iframe-container">
+				<iframe class="responsive-iframe" style="background: #ffffff; border: none; border-radius: 2px; box-shadow: 0 2px 10px 0 rgba(70, 76, 79, 0.2)" width="640" height="480" src="https://charts.mongodb.com/charts-cxm-nzfzz/embed/charts?id=8b386824-adad-400d-89b4-34ca93222242&maxDataAge=3600&theme=light&autoRefresh=false"></iframe>
+			</div>
+			<h2>Here are our Precision Recall charts: </h2>
 				<!-- PR curves stay static for now, maybe we'll get this from backend by 12/6 -->
 			<div>
 				<span>
