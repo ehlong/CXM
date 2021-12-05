@@ -1,11 +1,12 @@
 from flask import Flask
+from flask import request
 
 import Database_Api
 
 app = Flask(__name__)
 
 
-@app.route('/unclassified/<int:num>/')
+@app.route('/unclassified/<int:num>/', methods=['GET'])
 def retrieve_unclassified(num):
     """
     Function representing the /unclassified_tweets/ endpoint.
@@ -25,8 +26,22 @@ def retrieve_unclassified(num):
 
     tweets = Database_Api.fetch_batch_of_unclassified_tweets(collection, num)
     ret_val = {}
-    for tweet in enumerate(tweets):
+    for tweet in tweets:
         ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date']}
+    return ret_val
+
+@app.route('/unclassified/', methods=['PUT'])
+def put_unclassified():
+    print("Received classification for tweet " + str(request.json.get('id')) + ", " + request.json.get('class'))
+    return "Put processed."
+
+
+@app.route('/classified/')
+def retrieve_classified():
+    tweets = Database_Api.fetch_all_classified_tweets()
+    ret_val = {}
+    for tweet in tweets:
+        ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date'], 'class': tweet['class']}
     return ret_val
 
 
