@@ -5,6 +5,9 @@ function get_tweet_callback(data) {
     let tweets = JSON.parse(data)
   console.log(tweets)
   var i = 0;
+
+  unclassified_results = [];
+
   for(var key in tweets) {
       let elementId = "Tweet#" + (++i).toString();
       
@@ -142,6 +145,6 @@ function put_tweets_json () {
         }
         var data = JSON.stringify(big_class);
         console.log(data);
-        httpPutAsync("http://127.0.0.1:5000/unclassified/", data);
+        httpPutAsync("http://127.0.0.1:5000/unclassified/9", data, get_tweet_callback);
     }
 }
