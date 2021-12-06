@@ -117,6 +117,8 @@ def predict_bert(tweets: [str]):
         return
 
     result, model_outputs = model.predict(tweets)
+    print("Category == ", result)
+    print("Outputs == ", model_outputs)
 
     print('all is good')
     pass
