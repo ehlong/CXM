@@ -1,16 +1,6 @@
 <!-- This is where we will manually classify our tweets -->
 <!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal -->
 <!DOCTYPE html>
-		<script src="../src/fetchTweetsAppear.js"></script>
-		<script src="../src/classification.js"></script>
-		<script src="../src/rest.js"></script>
-		<script>
-	// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
-	// httpGetAsync is in rest.js
-	// get_tweet_callback is in classification.js
-	// the endpoint is run by the Flask_Server.py file
-	httpGetAsync("http://127.0.0.1:5000/unclassified/9", get_tweet_callback);
-</script>
 <html>
 	<head>
 		<script src="../src/fetchTweetsAppear.js"></script>

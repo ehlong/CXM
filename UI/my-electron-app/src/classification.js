@@ -77,6 +77,35 @@ function filter_json(data){
     }
 }
 
+let already_training = false;
+
+function retrain() {
+    if(!already_training) {
+        //we are not training the model, so start
+        already_training = true;
+
+        httpPostAsync("http://127.0.0.1:5000/retrain", "", function(result) {
+            already_training = false;
+
+            let v = JSON.parse(result)
+            if(!v['training']) {
+                //remove loading ui and notify of successful train
+                alert("The model was trained successfully!");
+            } else {
+                //say unsuccessful train, its already training (someone else must be training it)
+                //remove the ui thing
+                alert("The model is still being trained!");
+            }
+        });
+
+        //pop up fancy loading ui for training in progress
+        alert("Model is training!");
+    } else {
+        //we are training the model
+        alert("We're already training the model!");
+    }
+}
+
 function put_tweets_json () { 
     var big_class = {} 
     var ids = []
@@ -89,16 +118,14 @@ function put_tweets_json () {
     }
 
     //Grab each of the  checked radio values (classifications)
-    for(var i =0; i < checked.length;i++) { 
-
+    for(var i =0; i < checked.length;i++) {
         var user_class = checked[i]
         if(user_class.checked == true) { 
         values.push(user_class.value); 
         }
-
     }
 
-    //If user didnt check all the boxes then error.
+    //If user didn't check all the boxes then error.
     if(ids.length != values.length) { 
         alert("Please input all values before committing");
     }
