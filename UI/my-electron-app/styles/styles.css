@@ -190,6 +190,20 @@ input[type="submit"]:hover {
 }
 
 /* ROUNDED SLIDERS TOGGLER THINGIES */
+#sliders{
+	padding-left: 13%;
+	padding-right: 7%;
+	text-align: center;
+	margin: auto 0;
+	column-width: 100px;
+	column-count: 6;
+}
+
+.slider-label {
+	padding-top: 10%;
+	font-size: 23px;
+}
+
 .switch {
 	position: relative;
 	display: inline-block;
@@ -250,7 +264,18 @@ input:checked+.slider:before {
 	border-radius: 50%;
 }
 
-@media screen and (max-height: 450px) {
+@media only screen and (max-width: 550px){
+	#sliders {
+		column-count: 2;
+	}
+}
+
+@media only screen and (min-width: 600px){
+	#sliders {
+		column-count: 6;
+	}
+}
+@media screen and (max-height: 450px){
 	.sidenav {
 		padding-top: 15px;
 	}
