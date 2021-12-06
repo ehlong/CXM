@@ -17,3 +17,14 @@ function httpPutAsync(theUrl, data) {
     xmlHttp.setRequestHeader('content-type', 'application/json')
     xmlHttp.send(data);
 }
+
+function httpPostAsync(theUrl, data, callback) {
+    var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+          callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("POST", theUrl, true); // true for asynchronous
+    xmlHttp.setRequestHeader('content-type', 'application/json')
+    xmlHttp.send(data);
+}

@@ -131,6 +131,7 @@ def train_model():
 
 
 def train_model_cv():
+
     x, y, feature_names = preprocess_data()
     split_data_by_class_cv(x, y, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
@@ -138,7 +139,7 @@ def train_model_cv():
         CROSS_VALIDATORS[label].fit_predict()
         CROSS_VALIDATORS[label].print_top_ten()
         CROSS_VALIDATORS[label].print_classification_report()
-        CROSS_VALIDATORS[label].graph_pr_curve()
+        # CROSS_VALIDATORS[label].graph_pr_curve()
 
 
 def train_model_bert():
