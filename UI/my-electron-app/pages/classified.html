@@ -3,6 +3,9 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+		</style>
+		<script src="../src/fetchTweetsAppear.js"></script>
 		<script src="../src/classification.js"></script>
 		<script src="../src/rest.js"></script>
 		<script>
@@ -17,7 +20,7 @@
 		<link href="../styles/classificationstyle.css" rel="stylesheet" />
 		<title>Classified Tweets</title>
 	</head>
-	<body>
+	<body onload="timeoutForFetch(); randomMsg()" style="margin:0;">
 		<div id="mySidenav" class="sidenav">
 			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 			<a href="../index.html">Dashboard</a>
@@ -30,10 +33,14 @@
 				</div>
 			</div>
 		</div>
-
 		<div id="main">
-			<h1><span class="hamburger" style="font-size: 30px; cursor: pointer" onclick="openNav()">&#9776;</span> Classified Tweets</h1>
-			<!-- sliders to filter classes -->
+			<h1><span class="hamburger" onclick="openNav()">&#9776;</span> Classified Tweets</h1>
+			<div id="loader-container">
+				<div id="loader">
+				</div>
+				<h1 id="msg">Making things awesome...</h1>
+			</div>
+			<div style="display:none;" id="divForFetch" class="animate-bottom">
 			<div id="sliders">
 				<div style="margin:0; " class="slider-label"> Positive<br>
 					<label class="switch positive">
@@ -72,7 +79,11 @@
 				</label>
 				</div>
 			</div>
-			<div id="TweetBox" class="TweetBox">
+				<br>
+				<label class="sub-button1">
+					<input class="retrain-button" type="submit" value="Retrain ML Model" onclick=retrain() />
+				</label>
+				<div id="TweetBox" class="TweetBox">
 				<div id="Tweet#1">
 					<h2>TweetID</h2>
 					<p>Example tweet</p>
@@ -117,72 +128,87 @@
 					<h2>Tweet9</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#10">
 					<h2>Tweet10</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#11">
 					<h2>Tweet11</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#12">
 					<h2>Tweet12</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#13">
 					<h2>Tweet13</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#14">
 					<h2>Tweet14</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#15">
 					<h2>Tweet15</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#16">
 					<h2>Tweet16</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#17">
 					<h2>Tweet17</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#18">
 					<h2>Tweet18</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#19">
 					<h2>Tweet19</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#20">
 					<h2>Tweet20</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#21">
 					<h2>Tweet21</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#22">
 					<h2>Tweet22</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#23">
 					<h2>Tweet23</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#24">
 					<h2>Tweet24</h2>
 					<p>Example tweet</p>
 				</div>
+				<br />
 				<div id="Tweet#25">
 					<h2>Tweet25</h2>
 					<p>Example tweet</p>
 				</div>
-
-
+			</div>
 			</div>
 			<br />
 		</div>
@@ -190,20 +216,4 @@
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
 	</body>
-	<!-- <nav id="nav-tweets" class="section-nav">
-		<ul>
-			<li><a href="#main">All tweets</a></li>
-			<ul>
-				<li class=""><a href="#Tweet#1">Tweet#1</a></li>
-				<li class=""><a href="#Tweet#2">Tweet#2</a></li>
-				<li class=""><a href="#Tweet#3">Tweet#3</a></li>
-				<li class=""><a href="#Tweet#4">Tweet#4</a></li>
-				<li class=""><a href="#Tweet#5">Tweet#5</a></li>
-				<li class=""><a href="#Tweet#6">Tweet#6</a></li>
-				<li class=""><a href="#Tweet#7">Tweet#7</a></li>
-				<li class=""><a href="#Tweet#8">Tweet#8</a></li>
-				<li class=""><a href="#Tweet#9">Tweet#9</a></li>
-			</ul>
-		</ul>
-	</nav> -->
 </html>
