@@ -5,7 +5,6 @@ function get_tweet_callback(data) {
     let tweets = JSON.parse(data)
   console.log(tweets)
   var i = 0;
-
   unclassified_results = [];
 
   for(var key in tweets) {
@@ -19,6 +18,15 @@ function get_tweet_callback(data) {
       "<p>" + tweets[key]['text'] + "</p>";
       unclassified_results.push(key); 
   }
+  let element;
+  for(let j = 1; j<10; j++){
+      element = document.getElementsByName("classification" + j);
+      console.log(element);
+      for(let k = 0; k<element.length; k++){
+          console.log(element[k]);
+          element[k].checked = false;
+      }
+    }
 }
 
 var results;
