@@ -138,61 +138,90 @@ body {
 	color:white;
 }
 
-input[type=radio] {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  white-space: nowrap;
-  width: 1px;
-}
 
-.positive-link {
+
+positive-link {
   display: inline-block;
-}
-.positive-link .positive-color {
-  display: none;
-}
-.positive-link:hover .positive-gray,
-.positive-link:active .positive-gray {
-  display: none;
-}
-/*.positive-link:hover .positive-color,*/
-/*.positive-link:active .positive-color {*/
-/*  display: block;*/
-/*}*/
+} 
 
-:checked + label, .positive-link .positive-color{
-	display:block;
+/* Remove circular buttons */ 
+input[type=radio] { 
+	display: none;
 }
 
-/*input[type=radio] + label {*/
-/*	background: #444444;*/
-/*	color: #ccc;*/
-/*}*/
+/*BUTTONS THAT CHANGE WHEN CLICKED */
+input[type=radio] + label .positive-link .positive-color { 
+	display: none;
+}
 
-/*input[type=radio]:checked + label {*/
-/*	background: #444444;*/
-/*	color: #ccc;*/
-/*}*/
-/*!* When the user hovers over the label... *!*/
-/*input[type=radio]:hover + label {*/
-/*  background: #666;*/
-/*  color: #000;*/
-/*}*/
-/*!* When the user focuses the label via keyboard... *!*/
-/*input[type=radio]:focus + label {*/
-/*  background: #666;*/
-/*  color: #000;*/
-/*}*/
+input[type=radio]:checked + label .positive-link .positive-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .positive-link .positive-color{
+	display:inline-block;	
+}
 
-/*!* Radio buttons that are checked and have focus *!*/
-/*input[type=radio]:checked:focus + label {*/
-/*	background: #000000;*/
-/*	color: #ccc;*/
-/*}*/
+input[type=radio] + label .bugs-link .bugs-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .bugs-link .bugs-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .bugs-link .bugs-color{
+
+	display:inline-block;	
+}
+
+input[type=radio] + label .security-link .security-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .security-link .security-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .security-link .security-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .store-link .store-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .store-link .store-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .store-link .store-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .wants-link .wants-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .wants-link .wants-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .wants-link .wants-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .junk-link .junk-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .junk-link .junk-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .junk-link .junk-color{
+	display:inline-block;	
+}
 
 input[type="submit"] {
 	padding-top: 10px;
