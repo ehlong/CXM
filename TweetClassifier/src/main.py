@@ -1,6 +1,6 @@
-import torch.cuda
 from Database_Api import fetch_all_classified_tweets as fetch, \
     update_collection, get_database_collection
+import bert_experiment
 import pandas as pd
 import numpy as np
 import re
@@ -8,7 +8,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
 from BinaryClassifier import BinaryClassifier
 from CrossValidator import CrossValidator
-from simpletransformers.classification import ClassificationModel, ClassificationArgs
 import spacy
 import nltk
 
@@ -16,8 +15,7 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # TODO: Change preprocess_data_train_test_split for binClass to work
-# TODO: Make a dedicated BERT file
-# allow full printing within the console
+# Below allows full printing within the console
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
@@ -142,109 +140,6 @@ def train_model_cv():
         # CROSS_VALIDATORS[label].graph_pr_curve()
 
 
-def train_model_bert():
-    db_contents = fetch()
-    data = [[tweet['text'], tweet['class']] for tweet in db_contents]
-    df = pd.DataFrame(data, columns=['text', 'labels'])
-
-    train_df, eval_df = Split(df, test_size=0.1)
-
-    labels_map = {v: int(k)-1 for k, v in CATEGORIES.items()}
-    model_args = ClassificationArgs(
-        num_train_epochs=3,
-        evaluate_during_training=True,
-        labels_map=labels_map
-    )
-
-    cuda_available = torch.cuda.is_available()
-    model = ClassificationModel(
-        'bert',
-        'bert-base-cased',
-        args=model_args,
-        use_cuda=cuda_available,
-        num_labels=labels_map.keys().__len__()
-    )
-
-    global_step, training_details = model.train_model(
-        train_df,
-        eval_df=eval_df,
-        multi_label=True,
-    )
-    result, model_outputs, wrong_prediction = model.eval_model(eval_df)
-
-    print(f'Global step: {global_step}')
-    print(f'training_details: {training_details}')
-    print(result)
-    print(model_outputs)
-    print(wrong_prediction)
-
-    # TODO: Create retrain function
-
-def retrain_bert():
-    # 1. Get un-trained classified data
-    # 2. Retrieve BERT model
-    # 3. Train
-
-
-
-
-    db_contents = fetch()
-    ### CHECK ###
-    tweets = [x for x in db_contents if 'trained' not in x.keys()]
-    ### TESTING BELOW ###
-    for tweet in tweets:
-        tweet['trained'] = 1
-    collection = get_database_collection()
-    update_collection(collection, tweets)
-    data = [[tweet['text'], tweet['class']] for tweet in db_contents]
-    df = pd.DataFrame(data, columns=['text', 'labels'])
-
-    train_df, eval_df = Split(df, test_size=0.1)
-
-
-    cuda_available = torch.cuda.is_available()
-    try:
-        model = ClassificationModel(
-            "bert", "outputs/best_model",
-            use_cuda=cuda_available
-        )
-    except OSError as e:
-        print('The model does not exist')
-        return
-
-
-    global_step, training_details = model.train_model(
-        train_df,
-        eval_df=eval_df,
-        multi_label=True,
-    )
-    result, model_outputs, wrong_prediction = model.eval_model(eval_df)
-
-    print(f'Global step: {global_step}')
-    print(f'training_details: {training_details}')
-    print(result)
-    print(model_outputs)
-    print(wrong_prediction)
-
-
-def predict_bert(tweets: [str]):
-    cuda_available = torch.cuda.is_available()
-    try:
-        model = ClassificationModel(
-            "bert", "outputs/best_model",
-            use_cuda=cuda_available
-        )
-    except OSError as e:
-        print('The model does not exist')
-        return
-
-    result, model_outputs = model.predict(tweets)
-
-    print('all is good')
-    pass
-
-
 if __name__ == '__main__':
-    # train_model_cv()
-    train_model_bert()
-    predict_bert(["@epicgames my account got hacked please help"])
+    train_model_cv()
+    # bert_experiment.predict_bert(["@epicgames my account got hacked please help"])
