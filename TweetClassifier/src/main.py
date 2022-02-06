@@ -1,3 +1,6 @@
+import os
+import pickle
+
 from Database_Api import fetch_all_classified_tweets as fetch, \
     update_collection, get_database_collection
 import bert_experiment
@@ -6,7 +9,6 @@ import numpy as np
 import re
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split as Split
-from BinaryClassifier import BinaryClassifier
 from CrossValidator import CrossValidator
 import spacy
 import nltk
@@ -32,15 +34,14 @@ CATEGORIES = {
     6: 'junk'
 }
 
-BINARY_CLASSIFIERS = {}
-for classification in CATEGORIES.values():
-    BINARY_CLASSIFIERS[classification] = BinaryClassifier(classification)
-
 CROSS_VALIDATORS = {}
 for classification in CATEGORIES.values():
     CROSS_VALIDATORS[classification] = CrossValidator(classification)
 
-TESTING_DATA_PERCENTAGE = 0.4
+TEST_X_VALUES = []
+TEST_Y_VALUES = []
+
+TESTING_DATA_PERCENTAGE = 0.30
 
 
 def strip_links(tweet):
@@ -97,49 +98,63 @@ def preprocess_data():
     return x, y, feature_names
 
 
-# map the y values for each classification category to make them binary
-def split_data_by_class(train, test, feature_names):
+def split_data_by_class_cv(train, test, feature_names):
     x_train, y_train = train[0], train[1]
     x_test, y_test = test[0], test[1]
 
     for label in CATEGORIES.values():
-        BINARY_CLASSIFIERS[label].feature_names = feature_names
-        BINARY_CLASSIFIERS[label].x_train = x_train
-        BINARY_CLASSIFIERS[label].x_test = x_test
-        BINARY_CLASSIFIERS[label].y_train = list(map(lambda y: 1 if y == label else 0, y_train))
-        BINARY_CLASSIFIERS[label].y_test = list(map(lambda y: 1 if y == label else 0, y_test))
-
-
-def split_data_by_class_cv(x, y, feature_names):
-    for label in CATEGORIES.values():
         CROSS_VALIDATORS[label].feature_names = feature_names
-        CROSS_VALIDATORS[label].x = x
-        CROSS_VALIDATORS[label].y = list(map(lambda z: 1 if z == label else 0, y))
+        CROSS_VALIDATORS[label].x_train = x_train
+        CROSS_VALIDATORS[label].x_test = x_test
+        CROSS_VALIDATORS[label].y_test = list(map(lambda z: 1 if z == label else 0, y_test))
+        CROSS_VALIDATORS[label].y_train = list(map(lambda z: 1 if z == label else 0, y_train))
 
 
-def train_model():
+def train_model_cv() -> tuple[any, any, any]:
     train, test, feature_names = preprocess_data_train_test_split()
-    split_data_by_class(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
-
-    for label in CATEGORIES.values():
-        BINARY_CLASSIFIERS[label].fit_predict()
-        BINARY_CLASSIFIERS[label].print_top_ten()
-        BINARY_CLASSIFIERS[label].print_classification_report()
-        BINARY_CLASSIFIERS[label].graph_pr_curve()
-
-
-def train_model_cv():
-
-    x, y, feature_names = preprocess_data()
-    split_data_by_class_cv(x, y, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
+    split_data_by_class_cv(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
     for label in CATEGORIES.values():
         CROSS_VALIDATORS[label].fit_predict()
         CROSS_VALIDATORS[label].print_top_ten()
         CROSS_VALIDATORS[label].print_classification_report()
-        # CROSS_VALIDATORS[label].graph_pr_curve()
+        CROSS_VALIDATORS[label].graph_pr_curve()
+
+    return test[0], test[1], feature_names
+
+def pickle_models(x_test, y_test, feature_names):
+    print('Storing models...')
+    pickle_jar = {'x_test': x_test, 'y_test': y_test, 'feature_names': feature_names}
+    for model in CROSS_VALIDATORS.values():
+        cucumber = model.cucumber()
+        pickle_jar[cucumber['label']] = cucumber
+    filename = "models.pickle"
+    location = os.path.join("..", "models", filename)
+    pickle.dump(pickle_jar, open(location, 'wb+'))
+    print('Models stored successfully')
+
+def unpickle_models():
+    filename = "models.pickle"
+    location = os.path.join("..", "models", filename)
+    pickle_jar = pickle.load(open(location, 'rb'))
+    for label in CATEGORIES.values():
+        model = pickle_jar[label]
+        CROSS_VALIDATORS[label] = CrossValidator(model['label'], model['model'])
+        CROSS_VALIDATORS[label].x_test = pickle_jar['x_test']
+        CROSS_VALIDATORS[label].y_test = list(map(lambda z: 1 if z == label else 0, pickle_jar['y_test']))
+        CROSS_VALIDATORS[label].feature_names = pickle_jar['feature_names']
+
+        CROSS_VALIDATORS[label].print_classification_report()
+        CROSS_VALIDATORS[label].graph_pr_curve()
+
+
 
 
 if __name__ == '__main__':
-    train_model_cv()
+    # x_test, y_test, feature_names = train_model_cv()
+    # pickle_models(x_test, y_test, feature_names)
+    unpickle_models()
+
+
+
     # bert_experiment.predict_bert(["@epicgames my account got hacked please help"])
