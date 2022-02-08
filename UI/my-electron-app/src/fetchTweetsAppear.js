@@ -13,7 +13,7 @@ function randomMsg() {
     document.getElementById("msg").innerHTML = sayings[randomNumber];
 }
 function timeoutForFetch() {
-    timeout = setTimeout(showPage, 9000);	// 9 seconds is typically when tweets are pulled. can be lowered
+    timeout = setTimeout(showPage, 100);	// 9 seconds is typically when tweets are pulled. can be lowered
 }
 function showPage() {
     document.getElementById("loader").style.display = "none";
