@@ -1,6 +1,13 @@
 // parses the data from a get request for unclassified tweets
 
-var unclassified_results = []; 
+var unclassified_results = [];
+
+function showPage() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("divForFetch").style.display = "block";
+    document.getElementById("loader-container").style.display = "none";
+}
+
 function get_tweet_callback(data) {
     let tweets = JSON.parse(data)
   console.log(tweets)
@@ -16,8 +23,10 @@ function get_tweet_callback(data) {
       "<h2>Tweet ID: " + key + "</h2>\n" +
       "<p>Date: " + tweets[key]['date'] + "</p>\n" +
       "<p>" + tweets[key]['text'] + "</p>";
-      unclassified_results.push(key); 
+      unclassified_results.push(key);
+      showPage();
   }
+
   let element;
   for(let j = 1; j<10; j++){
       element = document.getElementsByName("classification" + j);
@@ -27,6 +36,7 @@ function get_tweet_callback(data) {
           element[k].checked = false;
       }
     }
+
 }
 
 var results;
@@ -45,6 +55,7 @@ function get_tweet_class_callback(data) {
       "<p>" + tweets[key]['text'] + "</p>\n" +
       "<p>class: " + tweets[key]['class'] + "</p>";
   }
+  showPage();
   results = tweets;
 }
 
