@@ -52,3 +52,4 @@ UI/my-electron-app/node_modules/
 #super secret key stuff
 twitter_key.yaml
 db_key.yaml
+TweetClassifier/src/__pycache__/

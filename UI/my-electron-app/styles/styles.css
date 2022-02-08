@@ -54,7 +54,6 @@ body {
 #wrapper {
 	text-align: center;
 	padding: 20px;
-	border: 1px, solid, #657786;
 }
 
 .iframe-container {
@@ -136,6 +135,91 @@ body {
 .retrain-button {
 	background: #1da1f2;
 	color:white;
+}
+
+
+
+positive-link {
+  display: inline-block;
+} 
+
+/* Remove circular buttons */ 
+input[type=radio] { 
+	display: none;
+}
+
+/*BUTTONS THAT CHANGE WHEN CLICKED */
+input[type=radio] + label .positive-link .positive-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .positive-link .positive-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .positive-link .positive-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .bugs-link .bugs-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .bugs-link .bugs-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .bugs-link .bugs-color{
+
+	display:inline-block;	
+}
+
+input[type=radio] + label .security-link .security-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .security-link .security-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .security-link .security-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .store-link .store-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .store-link .store-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .store-link .store-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .wants-link .wants-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .wants-link .wants-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .wants-link .wants-color{
+	display:inline-block;	
+}
+
+input[type=radio] + label .junk-link .junk-color { 
+	display: none;
+}
+
+input[type=radio]:checked + label .junk-link .junk-gray{
+	display: none;
+	
+}
+input[type=radio]:checked + label .junk-link .junk-color{
+	display:inline-block;	
 }
 
 input[type="submit"] {
