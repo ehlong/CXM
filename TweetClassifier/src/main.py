@@ -102,34 +102,29 @@ def preprocess_data():
     return x, y, feature_names
 
 
-def preprocess_unclass_data():
+# Fetch data from database unless supplied
+def preprocess_unclass_data(data=None):
     filename = "vectorizer.pickle"
     location = os.path.join("..", "models", filename)
     vectorizer = pickle.load(open(location, 'rb'))
-    vectorizer.set_params(vocabulary = vectorizer.get_feature_names_out())
-    data = fetch_un()
+    vectorizer.set_params(vocabulary=vectorizer.get_feature_names_out())
+    if data is None:
+        data = fetch_un()
     df = pd.DataFrame(data)
     # turn text into bag of words vectors
     tweets = df['text'].to_numpy()
     tokenizer = spacy.load('en_core_web_sm')
-    # print tweets before processing
-    print('Tweets before and after processing: ')
-    print(f'Before: \n{tweets[:5]}\n')
     tweets = np.vectorize(strip_links)(tweets)
     tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
-    print(f'After: \n{tweets[:5]}\n')
-    #vectorizer = CountVectorizer(ngram_range=(1, 1))
+
+    # vectorizer = CountVectorizer(ngram_range=(1, 1))
     x = vectorizer.fit_transform(tweets).toarray()
 
-    # print out the number of times each word appears
-    df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names_out())
-    print("The 10 most common words are: ")
-    print(df.sum().sort_values(ascending=False)[:10])
+    processed_tweet_map = [{'id': row['id'],'text': x[i]} for i, row in df.iterrows()]
 
-    # split and stratify so that train/test have similar target distribution
-    feature_names = np.array(vectorizer.get_feature_names_out())
     # return x, y
-    return x, feature_names
+    return processed_tweet_map
+
 
 def split_data_by_class_cv(train, test, feature_names):
     x_train, y_train = train[0], train[1]
@@ -143,7 +138,7 @@ def split_data_by_class_cv(train, test, feature_names):
         CROSS_VALIDATORS[label].y_train = list(map(lambda z: 1 if z == label else 0, y_train))
 
 
-def train_model_cv():# -> tuple[any, any, any]:
+def train_model_cv():  # -> tuple[any, any, any]:
     train, test, feature_names = preprocess_data_train_test_split()
     split_data_by_class_cv(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
@@ -154,6 +149,7 @@ def train_model_cv():# -> tuple[any, any, any]:
         CROSS_VALIDATORS[label].graph_pr_curve()
 
     return test[0], test[1], feature_names
+
 
 def pickle_models(x_test, y_test, feature_names):
     print('Storing models...')
@@ -166,7 +162,8 @@ def pickle_models(x_test, y_test, feature_names):
     pickle.dump(pickle_jar, open(location, 'wb+'))
     print('Models stored successfully')
 
-def unpickle_models():
+
+def unpickle_models_for_testing():
     filename = "models.pickle"
     location = os.path.join("..", "models", filename)
     pickle_jar = pickle.load(open(location, 'rb'))
@@ -181,34 +178,22 @@ def unpickle_models():
         CROSS_VALIDATORS[label].graph_pr_curve()
 
 
-
-
-#TODO: make this assign stuff to tweets
-def unpickle_unmodels(x, feature_names):
+# TODO: make this assign stuff to tweets
+def unpickle_models() -> dict[str: CrossValidator]:
     filename = "models.pickle"
     location = os.path.join("..", "models", filename)
     pickle_jar = pickle.load(open(location, 'rb'))
+    model_map: dict[str: CrossValidator] = {}
     for label in CATEGORIES.values():
         model = pickle_jar[label]
-        CROSS_VALIDATORS[label] = CrossValidator(model['label'], model['model'])
-        CROSS_VALIDATORS[label].x_test = x
-        CROSS_VALIDATORS[label].feature_names = pickle_jar['feature_names']
+        model_map[label] = CrossValidator(model['label'], model['model'])
 
-        CROSS_VALIDATORS[label].predict()
-        print(CROSS_VALIDATORS[label].y_prob[1])
-
-def pickle_predict():
-    # preprocess list of tweets
-    x, feature_names = preprocess_unclass_data()
-    # unpickle models, but with x_test as processed tweets
-    unpickle_unmodels(x, feature_names)
+    return model_map
 
 
 if __name__ == '__main__':
-    #x_test, y_test, feature_names = train_model_cv()
-    #pickle_models(x_test, y_test, feature_names)
-    pickle_predict()
-
-
+    # x_test, y_test, feature_names = train_model_cv()
+    # pickle_models(x_test, y_test, feature_names)
+    pass
 
     # bert_experiment.predict_bert(["@epicgames my account got hacked please help"])

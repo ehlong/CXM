@@ -1,9 +1,12 @@
+import json
+
 import pymongo
 from flask import Flask
 from flask import request
-import main
+from main import train_model_cv, preprocess_unclass_data, unpickle_models
 
 import Database_Api
+from src import CrossValidator
 
 app = Flask(__name__)
 
@@ -11,6 +14,7 @@ can_train = True
 
 # Goober error checking
 collection = Database_Api.get_database_collection()
+models: dict[str: CrossValidator]
 
 @app.route('/unclassified/<int:num>/', methods=['GET'])
 def retrieve_unclassified(num):
@@ -65,13 +69,29 @@ def retrain():
     global can_train
     if can_train:
         can_train = False
-        main.train_model_cv()
+        train_model_cv()
         can_train = True
         return {'training': False}
     else:
         return {'training': True}
 
+@app.route('/infer/', methods=['POST'])
+def classify_from_ui():
+
+    unprocessed_tweets = json.loads(request.data)
+    processed_data_map = preprocess_unclass_data(unprocessed_tweets)
+
+    for tweet in processed_data_map:
+        tweet['class'] = []
+        for predictor in models.values():
+            if predictor.model.predict(tweet['text'].reshape(1, -1)):
+                tweet['class'].append(predictor.label)
+
+    return json.dumps([{'id': tweet['id'], 'class': tweet['class']} for tweet in processed_data_map])
+
 
 if __name__ == '__main__':
     # this should be modified with host='0.0.0.0' to make the server publicly available
+    # Global, holds the ML models for persisting
+    models = unpickle_models()
     app.run()
