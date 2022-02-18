@@ -102,11 +102,11 @@ def preprocess_data():
     return x, y, feature_names
 
 
-#TODO: make new tweets compare against features of model so predict works.
 def preprocess_unclass_data():
     filename = "vectorizer.pickle"
     location = os.path.join("..", "models", filename)
     vectorizer = pickle.load(open(location, 'rb'))
+    vectorizer.set_params(vocabulary = vectorizer.get_feature_names_out())
     data = fetch_un()
     df = pd.DataFrame(data)
     # turn text into bag of words vectors
@@ -119,7 +119,7 @@ def preprocess_unclass_data():
     tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
     print(f'After: \n{tweets[:5]}\n')
     #vectorizer = CountVectorizer(ngram_range=(1, 1))
-    x = vectorizer.fit(tweets).toarray()
+    x = vectorizer.fit_transform(tweets).toarray()
 
     # print out the number of times each word appears
     df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names_out())
@@ -180,6 +180,10 @@ def unpickle_models():
         CROSS_VALIDATORS[label].print_classification_report()
         CROSS_VALIDATORS[label].graph_pr_curve()
 
+
+
+
+#TODO: make this assign stuff to tweets
 def unpickle_unmodels(x, feature_names):
     filename = "models.pickle"
     location = os.path.join("..", "models", filename)
@@ -191,7 +195,7 @@ def unpickle_unmodels(x, feature_names):
         CROSS_VALIDATORS[label].feature_names = pickle_jar['feature_names']
 
         CROSS_VALIDATORS[label].predict()
-        print(CROSS_VALIDATORS[label].y_pred)
+        print(CROSS_VALIDATORS[label].y_prob[1])
 
 def pickle_predict():
     # preprocess list of tweets
