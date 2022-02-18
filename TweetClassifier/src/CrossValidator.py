@@ -15,9 +15,10 @@ class CrossValidator:
         self.x_test = None
         self.y_test = None
         self.y_pred = None
+        self.y_prob = None
         self.feature_names = None
         if model is None:
-            self.model = LogisticRegression()
+            self.model = LogisticRegression(class_weight='balanced')
         else:
             self.model = model
 
@@ -52,6 +53,9 @@ class CrossValidator:
         results = grid.fit(self.x_train, self.y_train)
         self.model = results.best_estimator_
         self.y_pred = self.model.predict(self.x_train)
+
+    def predict(self):
+        self.y_prob = self.model.predict_proba(self.x_test)
 
     def cucumber(self):
         cucumber = {

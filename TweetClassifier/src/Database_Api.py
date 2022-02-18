@@ -165,6 +165,17 @@ def fetch_all_classified_tweets() -> [dict]:
 
     return tweets
 
+def fetch_all_unclassified_tweets() -> [dict]:
+    """
+    Search the database for classified tweets
+    return tweets
+    :return: A list of tweets
+    """
+    db_collection = get_database_collection()
+    query = {'class': {'$exists': False}}
+    tweets = list(db_collection.find(query).sort('id', pymongo.DESCENDING))
+
+    return tweets
 
 def fetch_for_manual_classify(db_collection: Collection, num: int) -> [dict]:
     """
