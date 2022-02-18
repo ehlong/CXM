@@ -121,7 +121,11 @@ def update_collection(db_collection: Collection, new_values: [dict]) -> BulkWrit
             }
         }
         if 'class' in document:
-            fields['$set']['class'] = document['class']
+            # remove erroneous "bugs" classes
+            if document['class'] == 'bugs':
+                fields['$set']['class'] = 'bugs/glitches'
+            else:
+                fields['$set']['class'] = document['class']
 
         if 'trained' in document:
             fields['$set']['trained'] = document['trained']
