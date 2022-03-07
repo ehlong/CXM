@@ -19,10 +19,11 @@ function get_tweet_callback(data) {
       }
     }
 
-    let tweets = JSON.parse(data)
+  let tweets = JSON.parse(data)
   console.log(tweets)
   var i = 1;
   unclassified_results = [];
+  let classRadioButton;
 
   for(var key in tweets) {
       let elementId = "Tweet#" + (i).toString();
@@ -34,9 +35,9 @@ function get_tweet_callback(data) {
       "<p>Date: " + tweets[key]['date'] + "</p>\n" +
       "<p>" + tweets[key]['text'] + "</p>";
       unclassified_results.push(key);
-      let clazz = tweets[key]['class']
+      let clazz = tweets[key]['class'];
       let classRadioButtonId = clazz + (i).toString();
-      console.log("Class: " + classRadioButtonId)
+      console.log("Class: " + classRadioButtonId);
       classRadioButton = document.getElementById(classRadioButtonId);
       classRadioButton.checked = true;
       ++i;
