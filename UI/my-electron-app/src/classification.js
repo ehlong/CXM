@@ -9,24 +9,6 @@ function showPage() {
 }
 
 function get_tweet_callback(data) {
-    let tweets = JSON.parse(data)
-  console.log(tweets)
-  var i = 0;
-  unclassified_results = [];
-
-  for(var key in tweets) {
-      let elementId = "Tweet#" + (++i).toString();
-      
-//      console.log("Attempting to set tweet: " + elementId)
-//      console.log("to: " + tweets[key]);
-      document.getElementById(elementId).innerHTML =
-      "<h2>Tweet ID: " + key + "</h2>\n" +
-      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      "<p>" + tweets[key]['text'] + "</p>";
-      unclassified_results.push(key);
-      showPage();
-  }
-
   let element;
   for(let j = 1; j<10; j++){
       element = document.getElementsByName("classification" + j);
@@ -37,6 +19,29 @@ function get_tweet_callback(data) {
       }
     }
 
+    let tweets = JSON.parse(data)
+  console.log(tweets)
+  var i = 1;
+  unclassified_results = [];
+
+  for(var key in tweets) {
+      let elementId = "Tweet#" + (i).toString();
+
+//      console.log("Attempting to set tweet: " + elementId)
+//      console.log("to: " + tweets[key]);
+      document.getElementById(elementId).innerHTML =
+      "<h2>Tweet ID: " + key + "</h2>\n" +
+      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
+      "<p>" + tweets[key]['text'] + "</p>";
+      unclassified_results.push(key);
+      let clazz = tweets[key]['class']
+      let classRadioButtonId = clazz + (i).toString();
+      console.log("Class: " + classRadioButtonId)
+      classRadioButton = document.getElementById(classRadioButtonId);
+      classRadioButton.checked = true;
+      ++i;
+  }
+  showPage();
 }
 
 var results;

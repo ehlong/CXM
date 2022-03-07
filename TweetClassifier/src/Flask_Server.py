@@ -7,7 +7,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from main import train_model_cv, preprocess_unclass_data, unpickle_models
 import Database_Api
-from src import CrossValidator
+import CrossValidator
 
 # Globals
 can_train = True
@@ -16,7 +16,6 @@ can_train = True
 collection = Database_Api.get_database_collection()
 
 # Unpickle persisted models for inference
-models: dict[str: CrossValidator]
 models = unpickle_models()
 
 # Set up scrape scheduler
@@ -53,7 +52,8 @@ def retrieve_unclassified(num):
 
     ret_val = {}
     for tweet in unclass_tweets:
-        ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date'], 'class': tweet['class']}
+        clazz = tweet['class'][0] if len(tweet['class']) != 0 else 'junk'
+        ret_val[tweet['id']] = {'text': tweet['text'], 'date': tweet['date'], 'class': clazz}
     return ret_val
 
 @app.route('/unclassified/<int:num>/', methods=['PUT'])

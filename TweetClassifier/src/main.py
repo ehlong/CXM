@@ -179,7 +179,7 @@ def unpickle_models_for_testing():
 
 
 # TODO: make this assign stuff to tweets
-def unpickle_models() -> dict[str: CrossValidator]:
+def unpickle_models():
     filename = "models.pickle"
     location = os.path.join("..", "models", filename)
     pickle_jar = pickle.load(open(location, 'rb'))
