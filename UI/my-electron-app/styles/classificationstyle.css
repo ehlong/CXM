@@ -5,45 +5,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 2. Make nav sticky */
-/* nav{
-  position: -webkit-sticky;
-  position: sticky;
-  top: 2rem;
-} */
-
-/* 3. ScrollSpy active styles (see JS tab for activation) */
-.section-nav li.active > a {
-  color: #333;
-  font-weight: 500;
-}
-
-/* Sidebar Navigation */
-.section-nav {
-  position: sticky;
-  top: 2rem; 
-  padding-left: 0;
-  border-left: 1px solid #efefef;
-}
-
-.section-nav a {
-  text-decoration: none;
-  display: block;
-  padding: .125rem 0;
-  color: #ccc;
-  transition: all 50ms ease-in-out; /* 💡 This small transition makes setting of the active state smooth */
-}
-
-.section-nav a:hover,
-.section-nav a:focus {
-  color: #666;
-}
-
-/** Poor man's reset **/
-* {
-  box-sizing: border-box;
-}
-
 html, body {
   background: #fff;
 }
