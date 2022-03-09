@@ -5,6 +5,7 @@
 	<head>
 		<script src="../src/fetchTweetsAppear.js"></script>
 		<script src="../src/classification.js"></script>
+		<script src="../src/loadTagsUnclassified.js"></script>
 		<script src="../src/rest.js"></script>
 		<script>
 			// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
@@ -62,37 +63,37 @@
 						<p>Example tweet</p>
 					</div>
 					<div>
-						<input type="radio" id="positive1" name="classification1" value="positive">
+						<input type="checkbox" id="positive1" name="classification1" value="positive">
 							<label for="positive1">
 								<a class="positive-link">
 								</a>
 							</label>
 						</input>
-						<input type="radio" id="bugs/glitches1" name="classification1" value="bugs1">
+						<input type="checkbox" id="bugs/glitches1" name="classification1" value="bugs1">
 							<label for="bugs/glitches1">
 								<a class="bugs-link">
 								</a>
 							</label>
 						</input>
-						<input type="radio" id="security1" name="classification1" value="security">
+						<input type="checkbox" id="security1" name="classification1" value="security">
 							<label for="security1">
 								<a class="security-link">
 								</a>
 							</label>
 						</input>
-						<input type="radio" id="store1" name="classification1" value="store">
+						<input type="checkbox" id="store1" name="classification1" value="store">
 							<label for="store1">
 								<a class=store-link>
 								</a>
 							</label>
 						</input>
-						<input type="radio" id="wants1" name="classification1" value="wants">
+						<input type="checkbox" id="wants1" name="classification1" value="wants">
 							<label for="wants1">
 								<a class="wants-link" >
 								</a>
 							</label>
 						</input>
-						<input type="radio" id="junk1" name="classification1" value="junk">
+						<input type="checkbox" id="junk1" name="classification1" value="junk">
 							<label for="junk1">
 								<a class="junk-link">
 								</a>
