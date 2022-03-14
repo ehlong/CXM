@@ -5,7 +5,7 @@ var unclassified_results = [];
 function showPage() {
     document.getElementById("loader").style.display = "none";
     document.getElementById("divForFetch").style.display = "block";
-    document.getElementById("loader-container").style.display = "none";
+    document.getElementById("loader-container").style.display = "none"; 
 }
 
 

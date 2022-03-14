@@ -41,10 +41,12 @@ function loadTweetBoxes (n) {
         tweet.innerHTML = 
         "<h2>TweetID </h2>" + '\n' + 
         "<p> Tweet Stuffs </p>"; 
-        t_box.item(0).appendChild(tweet)
-
+        var wrapper = document.createElement("div"); 
+        wrapper.setAttribute("class", "tweet_wrapper");
+        wrapper.appendChild(tweet);
         var checkboxes = getCheckBoxes(i); 
-        t_box.item(0).appendChild(checkboxes); 
+        wrapper.appendChild(checkboxes);
+        t_box.item(0).appendChild(wrapper);  
         
 
 
@@ -54,13 +56,14 @@ function loadTweetBoxes (n) {
 
 function getCheckBoxes(n) { 
     var boxes = document.createElement("div");
+    boxes.setAttribute("class","inputBox"); 
     
     for ( link of links ) { 
         var box = document.createElement("input"); 
         box.setAttribute("type", "checkbox"); 
         box.setAttribute("id", link + n); 
         box.setAttribute("name", "classification" + n); 
-        box.setAttribute("value", link + n); 
+        box.setAttribute("value", link); 
 
         var l = document.createElement("label"); 
         if(link === "bugs") { 
@@ -72,8 +75,10 @@ function getCheckBoxes(n) {
         var a = document.createElement("a"); 
         a.setAttribute("class", link + "-link"); 
 
-        l.appendChild(a); 
-        box.appendChild(l); 
+       
+        
+        l.appendChild(a);
+        box.appendChild(l);
         boxes.appendChild(box); 
     }
     return boxes; 

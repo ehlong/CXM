@@ -137,15 +137,14 @@ body {
 	color:white;
 }
 
-
-
-positive-link {
-  display: inline-block;
-} 
+.inputBox { 
+	overflow: hidden;
+}
 
 /* Remove circular buttons */ 
-input[type=checkbox] { 
-	display: none;
+
+input[type=checkbox] { 	
+
 }
 /*BUTTONS THAT CHANGE WHEN CLICKED */
 input[type=checkbox] + label .positive-link .positive-color { 
