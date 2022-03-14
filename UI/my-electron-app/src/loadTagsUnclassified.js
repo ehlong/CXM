@@ -74,7 +74,7 @@ function getCheckBoxes(n) {
 
         l.appendChild(a); 
         box.appendChild(l); 
-        boxes = boxes.appendChild(box); 
+        boxes.appendChild(box); 
     }
     return boxes; 
 
