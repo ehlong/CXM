@@ -36,7 +36,7 @@ function loadTweetBoxes (n) {
 
     for(var i =1; i <= n; i++) { 
         var tweet = document.createElement("div"); 
-        tweet.setAttribute("id", "Tweet" + i); 
+        tweet.setAttribute("id", "Tweet#" + i); 
         tweet.setAttribute("class", "tweet"); 
         tweet.innerHTML = 
         "<h2>TweetID </h2>" + '\n' + 

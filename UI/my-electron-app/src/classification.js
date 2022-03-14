@@ -11,6 +11,7 @@ function showPage() {
 
 
 function get_tweet_callback(data) {
+    loadTweetBoxes(9); 
   let element;
   for(let j = 1; j<10; j++){
       element = document.getElementsByName("classification" + j);
@@ -41,7 +42,7 @@ function get_tweet_callback(data) {
       let classRadioButtonId = clazz + (i).toString();
       console.log("Class: " + classRadioButtonId);
       classRadioButton = document.getElementById(classRadioButtonId);
-      classRadioButton.checked = true;
+      //classRadioButton.checked = true;
       ++i;
   }
   showPage();
@@ -49,7 +50,6 @@ function get_tweet_callback(data) {
 
 var results;
 function get_tweet_class_callback(data) {
-    loadTweetBoxes(9); 
   var tweets = JSON.parse(data)
   //console.log(tweets)
   var i = 0;
