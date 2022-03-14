@@ -11,7 +11,6 @@ function showPage() {
 
 
 function get_tweet_callback(data) {
-    loadTweetBoxes(9); 
   let element;
   for(let j = 1; j<10; j++){
       element = document.getElementsByName("classification" + j);

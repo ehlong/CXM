@@ -41,15 +41,15 @@ function loadTweetBoxes (n) {
         tweet.innerHTML = 
         "<h2>TweetID </h2>" + '\n' + 
         "<p> Tweet Stuffs </p>"; 
-        console.log(tweet);
         t_box.item(0).appendChild(tweet)
 
         var checkboxes = getCheckBoxes(i); 
         t_box.item(0).appendChild(checkboxes); 
+        
 
 
     }
-    // console.log(t_box); 
+    console.log(t_box.item(0)); 
 }
 
 function getCheckBoxes(n) { 
@@ -74,7 +74,7 @@ function getCheckBoxes(n) {
 
         l.appendChild(a); 
         box.appendChild(l); 
-        boxes.appendChild(box); 
+        boxes = boxes.appendChild(box); 
     }
     return boxes; 
 
