@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    loadTweetBoxes(9);
+    loadTweetBoxes(9); 
     loadImgs();
     
 });
@@ -32,7 +32,7 @@ function loadImgs() {
 
 
 function loadTweetBoxes (n) { 
-    var t_box = document.getElementsByClassName("Tweetbox"); 
+    let t_box = document.getElementsByClassName("TweetBox"); 
 
     for(var i =1; i <= n; i++) { 
         var tweet = document.createElement("div"); 
@@ -42,10 +42,10 @@ function loadTweetBoxes (n) {
         "<h2>TweetID </h2>" + '\n' + 
         "<p> Tweet Stuffs </p>"; 
         console.log(tweet);
-        t_box.appendChild(tweet); 
+        t_box.item(0).appendChild(tweet)
 
         var checkboxes = getCheckBoxes(i); 
-        t_box.appendChild(checkboxes); 
+        t_box.item(0).appendChild(checkboxes); 
 
 
     }
@@ -76,5 +76,6 @@ function getCheckBoxes(n) {
         box.appendChild(l); 
         boxes.appendChild(box); 
     }
+    return boxes; 
 
 }

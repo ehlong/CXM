@@ -14,15 +14,15 @@ function get_tweet_callback(data) {
   let element;
   for(let j = 1; j<10; j++){
       element = document.getElementsByName("classification" + j);
-      console.log(element);
+      //console.log(element);
       for(let k = 0; k<element.length; k++){
-          console.log(element[k]);
+          //console.log(element[k]);
           element[k].checked = false;
       }
     }
 
   let tweets = JSON.parse(data)
-  console.log(tweets)
+  //console.log(tweets)
   var i = 1;
   unclassified_results = [];
   let classRadioButton;
@@ -49,8 +49,9 @@ function get_tweet_callback(data) {
 
 var results;
 function get_tweet_class_callback(data) {
+    loadTweetBoxes(9); 
   var tweets = JSON.parse(data)
-  console.log(tweets)
+  //console.log(tweets)
   var i = 0;
   for(var key in tweets) {
       let elementId = "Tweet#" + (++i).toString();
