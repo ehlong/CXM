@@ -107,11 +107,17 @@ function getCheckBoxes(n) {
 function get_new_tweets() { 
     
     try { 
-        var tweet_box = document.getElementsByClassName("TweetBox"); 
-        tweet_box.item(0).innerHTML = "";
-        var n = document.getElementById("new_tweets_num").value; 
-        loadTweetBoxes(n); 
-        httpGetAsync("http://127.0.0.1:5000/unclassified/" + n, get_tweet_callback);
+        var n = document.getElementById("new_tweets_num"); 
+        if(n.value < 1 || n.value > 30 )  {
+            alert("Values only between 1-30!");
+
+        }
+        else { 
+            var tweet_box = document.getElementsByClassName("TweetBox"); 
+            tweet_box.item(0).innerHTML = "";
+            loadTweetBoxes(n.value); 
+            httpGetAsync("http://127.0.0.1:5000/unclassified/" + n.value, get_tweet_callback);
+        }
     }
     catch { 
         console.log("error occured"); 

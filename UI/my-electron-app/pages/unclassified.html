@@ -52,9 +52,10 @@
 						<input type="submit" value="Fetch New Tweets" onclick="window.location.reload();" />
 					</label>
 				</div>
-				<form> 
-					<input type="number" id="new_tweets_num"> 
-					<button type="button" onclick=get_new_tweets()>Get more</button>
+				<form onsubmit="return false">
+					<br>
+					<input type="number" id="new_tweets_num" min="1" max="30"> 
+					<button type="button" onclick=get_new_tweets()>Load Count</button>
 				</form>
 				<div id="TweetBox" class="TweetBox">
 				</div>
