@@ -12,7 +12,9 @@ function showPage() {
 
 function get_tweet_callback(data) {
   let element;
-  for(let j = 1; j<10; j++){
+  var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
+    console.log("HERE" + n_tweets); 
+  for(let j = 1; j<n_tweets; j++){
       element = document.getElementsByName("classification" + j);
       //console.log(element);
       for(let k = 0; k<element.length; k++){
@@ -171,7 +173,10 @@ function put_tweets_json () {
             big_class[ids[i]] = values[i];
         }
         var data = JSON.stringify(big_class);
-        console.log(data);
-        httpPutAsync("http://127.0.0.1:5000/unclassified/9", data, get_tweet_callback);
+        // console.log(data);
+
+        var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
+        console.log("HERE" + n_tweets); 
+        httpPutAsync("http://127.0.0.1:5000/unclassified/20", data, get_tweet_callback);
     }
 }

@@ -1,7 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    loadTweetBoxes(9); 
-    loadImgs();
+    loadTweetBoxes(10); 
     
 });
 
@@ -57,6 +56,7 @@ function loadTweetBoxes (n) {
 
 
     }
+    loadImgs();
     console.log(t_box.item(0)); 
 }
 
@@ -74,7 +74,7 @@ function getCheckBoxes(n) {
         box.setAttribute("value", link); 
 
         //  Create label div <label for="bugs/glitches1"
-        var l = document.createElement("label"); 
+        var l = document.createElement("div"); 
         if(link === "bugs") { 
             l.setAttribute("for", "bugs/glitches" + n); 
         }
@@ -82,19 +82,38 @@ function getCheckBoxes(n) {
             l.setAttribute("for", link + n); 
         }
         //create a element <a class=positive-link>
-        var a = document.createElement("a"); 
+        var a = document.createElement("label"); 
         a.setAttribute("class", link + "-link"); 
+        a.setAttribute("for", link+n); 
 
        
         //  Inside label element we append <a class=positive-link>
-        l.appendChild(a);
+        // l.appendChild(box);
+        // l.appendChild(a); 
         //  Iside input element we append label
-        box.appendChild(l);
+        //box.appendChild(l);
 
         //  inside of inputBox element we append input
-        boxes.appendChild(box); 
+    
+        boxes.appendChild(box);
+        boxes.appendChild(a);
+
     }
     //  Return all inputs elements for that specific number. This should return the inputBox that contains everything.
     return boxes; 
 
+}
+
+function get_new_tweets() { 
+    
+    try { 
+        var tweet_box = document.getElementsByClassName("TweetBox"); 
+        tweet_box.item(0).innerHTML = "";
+        var n = document.getElementById("new_tweets_num").value; 
+        loadTweetBoxes(n); 
+        httpGetAsync("http://127.0.0.1:5000/unclassified/" + n, get_tweet_callback);
+    }
+    catch { 
+        console.log("error occured"); 
+    }
 }

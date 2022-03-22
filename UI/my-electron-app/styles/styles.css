@@ -137,162 +137,28 @@ body {
 	color:white;
 }
 
-.inputBox { 
-	overflow: hidden;
-}
+
 
 /* Remove circular buttons */ 
 
 input[type=checkbox] { 	
-
+	display: none;
 }
 /*BUTTONS THAT CHANGE WHEN CLICKED */
-input[type=checkbox] + label .positive-link .positive-color { 
+input[type=checkbox] + label img[alt~="check"] { 
 	display: none;
 }
-
-input[type=checkbox]:checked + label .positive-link .positive-gray{
-	display: none;
-	
-}
-input[type=checkbox]:checked + label .positive-link .positive-color{
-	display:inline-block;	
+input[type=checkbox] + label img[alt~="uncheck"] { 
+	display: inline;
 }
 
-input[type=checkbox] + label .bugs-link .bugs-color { 
-	display: none;
-}
-
-input[type=checkbox]:checked + label .bugs-link .bugs-gray{
+input[type=checkbox]:checked + label img[alt="uncheck"] { 
 	display: none;
 	
-}
-input[type=checkbox]:checked + label .bugs-link .bugs-color{
-
-	display:inline-block;	
-}
-
-input[type=checkbox] + label .security-link .security-color { 
-	display: none;
-}
-
-input[type=checkbox]:checked + label .security-link .security-gray{
-	display: none;
-	
-}
-input[type=checkbox]:checked + label .security-link .security-color{
-	display:inline-block;	
-}
-
-input[type=checkbox] + label .store-link .store-color { 
-	display: none;
-}
-
-input[type=checkbox]:checked + label .store-link .store-gray{
-	display: none;
-	
-}
-input[type=checkbox]:checked + label .store-link .store-color{
-	display:inline-block;	
-}
-
-input[type=checkbox] + label .wants-link .wants-color { 
-	display: none;
-}
-
-input[type=checkbox]:checked + label .wants-link .wants-gray{
-	display: none;
-	
-}
-input[type=checkbox]:checked + label .wants-link .wants-color{
-	display:inline-block;	
-}
-
-input[type=checkbox] + label .junk-link .junk-color { 
-	display: none;
-}
-
-input[type=checkbox]:checked + label .junk-link .junk-gray{
-	display: none;
-	
-}
-input[type=checkbox]:checked + label .junk-link .junk-color{
-	display:inline-block;	
-}
-
-/*BUTTONS THAT CHANGE WHEN CLICKED */
-input[type=radio] + label .positive-link .positive-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .positive-link .positive-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .positive-link .positive-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .bugs-link .bugs-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .bugs-link .bugs-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .bugs-link .bugs-color{
-
-	display:inline-block;	
-}
-
-input[type=radio] + label .security-link .security-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .security-link .security-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .security-link .security-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .store-link .store-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .store-link .store-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .store-link .store-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .wants-link .wants-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .wants-link .wants-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .wants-link .wants-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .junk-link .junk-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .junk-link .junk-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .junk-link .junk-color{
-	display:inline-block;	
-}
+} 
+input[type=checkbox]:checked + label img[alt="check"] { 
+	display: inline; 
+} 
 
 input[type="submit"] {
 	padding-top: 10px;

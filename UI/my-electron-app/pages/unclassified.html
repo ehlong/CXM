@@ -13,7 +13,7 @@
 			// get_tweet_callback is in classification.js
 			// the endpoint is run by the Flask_Server.py file
 
-			httpGetAsync("http://127.0.0.1:5000/unclassified/9", get_tweet_callback);
+			httpGetAsync("http://127.0.0.1:5000/unclassified/10", get_tweet_callback);
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="../styles/styles.css" rel="stylesheet" />
@@ -52,6 +52,10 @@
 						<input type="submit" value="Fetch New Tweets" onclick="window.location.reload();" />
 					</label>
 				</div>
+				<form> 
+					<input type="number" id="new_tweets_num"> 
+					<button type="button" onclick=get_new_tweets()>Get more</button>
+				</form>
 				<div id="TweetBox" class="TweetBox">
 				</div>
 			</div>				
