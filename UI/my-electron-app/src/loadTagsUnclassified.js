@@ -1,9 +1,3 @@
-
-document.addEventListener("DOMContentLoaded", function() {
-    loadTweetBoxes(10); 
-    
-});
-
 let links = ["positive", "bugs", "security", "store", "wants", "junk"];
 function loadImgs() { 
     //This function is just to insert image based on class.
@@ -12,11 +6,11 @@ function loadImgs() {
         var tweetbox = document.getElementsByClassName(link + "-link"); 
 
         for(var i = 0; i < tweetbox.length ; i++) {
-            //Since we have multiple tweets we need to run through all of them and insert the specific class image. In this class we just slapped a innerhtml and copy pasta
+            //Since we have multiple tweets we need to run through all of them and insert the specific class image. 
+            //In this class we just slapped a innerhtml and copy pasta
             tweetbox[i].innerHTML =   
             "<img class=\"" + link + "-gray\" src=\"../img/svgs/" + link + "-gray.svg\" alt=\"uncheck\" title=\" " + link.toUpperCase() + "\"/>" + "\n" +   
             "<img class=\"" + link + "-color\" src=\"../img/svgs/" + link + "-color.svg\" alt=\"check\" title=\"" + link.toUpperCase() + "\"/>";
-        
         }
     }
 }
@@ -72,6 +66,7 @@ function getCheckBoxes(n) {
         box.setAttribute("id", link + n); 
         box.setAttribute("name", "classification" + n); 
         box.setAttribute("value", link); 
+        box.setAttribute("class", "class-box")
 
         //  Create label div <label for="bugs/glitches1"
         var l = document.createElement("div"); 
@@ -101,7 +96,6 @@ function getCheckBoxes(n) {
     }
     //  Return all inputs elements for that specific number. This should return the inputBox that contains everything.
     return boxes; 
-
 }
 
 function get_new_tweets() { 

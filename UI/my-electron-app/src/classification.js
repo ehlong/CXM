@@ -7,6 +7,7 @@ function showPage() {
     document.getElementById("divForFetch").style.display = "block";
     document.getElementById("loader-container").style.display = "none"; 
 }
+
 function get_tweet_callback(data) {
   let element;
   var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
@@ -41,14 +42,25 @@ function get_tweet_callback(data) {
 //       document.getElementById(elementId).innerHTML =
       // "<h2>Tweet ID: " + key + "</h2>\n" +
       // "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      // "<p>" + tweets[key]['text'] + "</p>";
-      $("#TweetTable tbody").append(
-          "<tr>" +
-            "<td>" + key + "</td>" +
-            "<td>" + tweets[key]['date'] + "</td>" +
-            "<td>" + tweets[key]['text'] + "</td>"
-      );
+      // "<p>" + tweets[key]['text'] + "</p>";    
 
+      let table = document.getElementById("TweetTable")
+      let row = document.createElement("tr")
+      let tweetKey = document.createElement("td")
+      tweetKey.innerHTML = key
+      let tweetDate = document.createElement("td")
+      tweetDate.innerHTML = tweets[key]['date']
+      let tweetText = document.createElement("td")
+      tweetText.innerHTML = tweets[key]['text']
+      let boxes = document.createElement("td")
+      boxes.appendChild(getCheckBoxes(key))
+      loadImgs()
+
+      row.appendChild(tweetKey)
+      row.appendChild(tweetDate)
+      row.appendChild(tweetText)
+      row.appendChild(boxes)
+      table.appendChild(row)
 
       unclassified_results.push(key);
       let clazz = tweets[key]['class'];

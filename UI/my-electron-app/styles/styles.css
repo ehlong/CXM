@@ -145,6 +145,11 @@ input[type=checkbox] {
 	display: none;
 }
 /*BUTTONS THAT CHANGE WHEN CLICKED */
+input[type=checkbox] + label img {
+	width: 3em;
+	height: 3em;
+}
+
 input[type=checkbox] + label img[alt~="check"] { 
 	display: none;
 }
@@ -176,6 +181,11 @@ input[type="submit"] {
 input[type="submit"]:hover {
 	color: white;
 	background: #80ceff;
+}
+
+#TweetTable > tr{
+	padding-top: 100em;
+	padding-bottom: 100em;
 }
 
 /* Center the loader */
