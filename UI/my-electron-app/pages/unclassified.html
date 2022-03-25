@@ -7,6 +7,7 @@
 		<script src="../src/fetchTweetsAppear.js"></script>
 		<script src="../src/classification.js"></script>
 		<script src="../src/rest.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 		<script>
 			// Asynchronous callback, passes the GET results from the 'unclassified_tweets' endpoint to 'get_tweet_callback'
 			// httpGetAsync is in rest.js
@@ -58,6 +59,14 @@
 					<button type="button" onclick=get_new_tweets()>Load Count</button>
 				</form>
 				<div id="TweetBox" class="TweetBox">
+				  <table id="TweetTable">
+					  <tr>
+						<th>Tweet ID</th>
+						<th>Date</th>
+						<th>Tweet</th>
+						<th>Class</th>
+					  </tr>
+				  </table>
 				</div>
 			</div>				
 				<div style="text-align: center;">

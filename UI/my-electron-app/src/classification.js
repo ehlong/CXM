@@ -7,21 +7,15 @@ function showPage() {
     document.getElementById("divForFetch").style.display = "block";
     document.getElementById("loader-container").style.display = "none"; 
 }
-
-
-
 function get_tweet_callback(data) {
   let element;
   var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
-    console.log("HERE" + n_tweets); 
   for(let j = 1; j<n_tweets; j++){
       element = document.getElementsByName("classification" + j);
-      //console.log(element);
       for(let k = 0; k<element.length; k++){
-          //console.log(element[k]);
           element[k].checked = false;
       }
-    }
+  }
 
   let tweets = JSON.parse(data)
   //console.log(tweets)
@@ -29,15 +23,33 @@ function get_tweet_callback(data) {
   unclassified_results = [];
   let classRadioButton;
 
-  for(var key in tweets) {
-      let elementId = "Tweet#" + (i).toString();
+  // document.getElementById("TweetBox").innerHTML =
+  //     "<table>" +
+  //         "<tr>" +
+  //           "<th>Tweet ID</th>" +
+  //           "<th>Date</th>" +
+  //           "<th>Tweet</th>" +
+  //           "<th>Class</th>" +
+  //         "</tr>" +
+  //     "</table>";
 
+  for(var key in tweets) {
+
+      let elementId = "Tweet#" + (i).toString();
 //      console.log("Attempting to set tweet: " + elementId)
 //      console.log("to: " + tweets[key]);
-      document.getElementById(elementId).innerHTML =
-      "<h2>Tweet ID: " + key + "</h2>\n" +
-      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      "<p>" + tweets[key]['text'] + "</p>";
+//       document.getElementById(elementId).innerHTML =
+      // "<h2>Tweet ID: " + key + "</h2>\n" +
+      // "<p>Date: " + tweets[key]['date'] + "</p>\n" +
+      // "<p>" + tweets[key]['text'] + "</p>";
+      $("#TweetTable tbody").append(
+          "<tr>" +
+            "<td>" + key + "</td>" +
+            "<td>" + tweets[key]['date'] + "</td>" +
+            "<td>" + tweets[key]['text'] + "</td>"
+      );
+
+
       unclassified_results.push(key);
       let clazz = tweets[key]['class'];
       let classRadioButtonId = clazz + (i).toString();
@@ -59,11 +71,19 @@ function get_tweet_class_callback(data) {
       if(i === 26){
           break;
       }
-      document.getElementById(elementId).innerHTML =
-      "<h2>Tweet ID: " + key + "</h2>\n" +
-      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      "<p>" + tweets[key]['text'] + "</p>\n" +
-      "<p>class: " + tweets[key]['class'] + "</p>";
+      // document.getElementById(elementId).innerHTML =
+      // "<h2>Tweet ID: " + key + "</h2>\n" +
+      // "<p>Date: " + tweets[key]['date'] + "</p>\n" +
+      // "<p>" + tweets[key]['text'] + "</p>\n" +
+      // "<p>class: " + tweets[key]['class'] + "</p>";
+
+      $("#TweetTable tbody").append(
+          "<tr>" +
+            "<td>" + key + "</td>" +
+            "<td>" + tweets[key]['date'] + "</td>" +
+            "<td>" + tweets[key]['text'] + "</td>"
+      );
+
   }
   showPage();
   results = tweets;
@@ -90,6 +110,7 @@ function filter_json(data){
                   "<p>Date: " + filteredResults[key]['date'] + "</p>\n" +
                   "<p>" + filteredResults[key]['text'] + "</p>\n" +
                   "<p>class: " + filteredResults[key]['class'] + "</p>";
+
         }
 
     }
