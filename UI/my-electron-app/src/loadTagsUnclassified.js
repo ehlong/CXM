@@ -107,9 +107,9 @@ function get_new_tweets() {
 
         }
         else { 
-            var tweet_box = document.getElementsByClassName("TweetBox"); 
-            tweet_box.item(0).innerHTML = "";
-            loadTweetBoxes(n.value); 
+            var tweet_box = document.getElementById("TweetTable"); 
+            tweet_box.innerHTML = ""; 
+            // loadTweetBoxes(n.value); 
             httpGetAsync("http://127.0.0.1:5000/unclassified/" + n.value, get_tweet_callback);
         }
     }
