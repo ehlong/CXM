@@ -1,3 +1,4 @@
+
 let links = ["positive", "bugs", "security", "store", "wants", "junk"];
 function loadImgs() { 
     //This function is just to insert image based on class.

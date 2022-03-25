@@ -59,7 +59,6 @@ function get_tweet_callback(data) {
       let boxes = document.createElement("td")
       boxes.setAttribute("class", "inputBox_wrapper"); 
       boxes.appendChild(getCheckBoxes(key))
-      loadImgs()
 
       row.appendChild(tweetKey)
       row.appendChild(tweetDate)
@@ -75,6 +74,7 @@ function get_tweet_callback(data) {
       //classRadioButton.checked = true;
       ++i;
   }
+  loadImgs();
   showPage();
 }
 
