@@ -46,13 +46,18 @@ function get_tweet_callback(data) {
 
       let table = document.getElementById("TweetTable")
       let row = document.createElement("tr")
+      row.setAttribute("id", elementId); 
       let tweetKey = document.createElement("td")
+      tweetKey.setAttribute("id", "tweet_id"); 
       tweetKey.innerHTML = key
       let tweetDate = document.createElement("td")
+      tweetDate.setAttribute("id", "tweet_date"); 
       tweetDate.innerHTML = tweets[key]['date']
       let tweetText = document.createElement("td")
+      tweetText.setAttribute("id", "tweet_text"); 
       tweetText.innerHTML = tweets[key]['text']
       let boxes = document.createElement("td")
+      boxes.setAttribute("class", "inputBox_wrapper"); 
       boxes.appendChild(getCheckBoxes(key))
       loadImgs()
 
