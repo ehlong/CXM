@@ -54,10 +54,11 @@
 					</label>
 				</div>
 				<form onsubmit="return false">
-					<br>
-					<input type="number" id="new_tweets_num" min="1" max="30"> 
+					<br><label>View Size 1-30</label>
+					<input type="number" id="new_tweets_num" min="1" max="30">
 					<button type="button" onclick=get_new_tweets()>Load Count</button>
 				</form>
+				<br>
 				<div id="TweetBox" class="TweetBox">
 				  <table id="TweetTable" border="1">
 					  <tr>
@@ -68,12 +69,13 @@
 					  </tr>
 				  </table>
 				</div>
-			</div>				
+				<br>
 				<div style="text-align: center;">
 					<label class="sub-button1">
 						<input id= "submitButton" type="submit" value="Commit All Classsified" onclick= put_tweets_json() />
 					</label>
 				</div>
+			</div>
 		</div>
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
