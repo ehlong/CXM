@@ -12,9 +12,6 @@ var randomNumber = Math.floor(Math.random()*sayings.length);
 function randomMsg() {
     document.getElementById("msg").innerHTML = sayings[randomNumber];
 }
-function timeoutForFetch() {
-    timeout = setTimeout(showPage, 100);	// 9 seconds is typically when tweets are pulled. can be lowered
-}
 function showPage() {
     document.getElementById("loader").style.display = "none";
     document.getElementById("divForFetch").style.display = "block";
