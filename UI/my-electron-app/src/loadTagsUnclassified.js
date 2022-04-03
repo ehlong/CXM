@@ -55,11 +55,10 @@ function loadTweetBoxes (n) {
     console.log(t_box.item(0)); 
 }
 
-function getCheckBoxes(n) { 
+function getCheckBoxes(n, tweets) { 
     //  Create <div class="inputBox"> </div> 
     var boxes = document.createElement("div");
     boxes.setAttribute("class","inputBox"); 
-    
     //  Now for each class we make a input div with that specific classid and number an exmaple should be <input type="checkbox" id="positive1" name="classification1" value="positive"></input> 
     for ( link of links ) { 
         var box = document.createElement("input"); 
@@ -68,6 +67,16 @@ function getCheckBoxes(n) {
         box.setAttribute("name", "classification" + n); 
         box.setAttribute("value", link); 
         box.setAttribute("class", "class-box")
+
+        //Check if tweet is there and if it matches with class, mark as checked.
+        if(tweets != null) {
+            if(tweets['class'] == link) { 
+                box.checked = true;
+            }
+            else if(tweets['class'] == "bugs/glitches" && link == "bugs") { 
+                box.checked = true;
+            }
+        }
 
         //  Create label div <label for="bugs/glitches1"
         var l = document.createElement("div"); 
