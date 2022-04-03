@@ -65,16 +65,18 @@ function getCheckBoxes(n, tweets) {
         box.setAttribute("type", "checkbox"); 
         box.setAttribute("id", link + n); 
         box.setAttribute("name", "classification" + n); 
-        box.setAttribute("value", link); 
+        // box.setAttribute("value", ""); 
         box.setAttribute("class", "class-box")
 
         //Check if tweet is there and if it matches with class, mark as checked.
         if(tweets != null) {
             if(tweets['class'] == link) { 
                 box.checked = true;
+                box.setAttribute("value", tweets['class'])
             }
             else if(tweets['class'] == "bugs/glitches" && link == "bugs") { 
                 box.checked = true;
+                box.setAttribute("value", tweets['class'])
             }
         }
 
