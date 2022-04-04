@@ -119,14 +119,11 @@ function checkInferred(c) {
     let tweetInferred = document.getElementById("tweet_inferred" + id);
 
 
-    if(c.checked == true) { 
-
-        tweetInferred.innerHTML = "ZOOMIE 4 LYFE!!!"
-        tweetInferred.style.backgroundColor = "RED"
+    if(c.checked == true) {
+        tweetInferred.innerHTML = "&#129302;";
     }
     else { 
         tweetInferred.innerHTML = ""
-        tweetInferred.style.backgroundColor = "WHITE"
     }
 }
 

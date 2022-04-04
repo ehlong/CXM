@@ -41,8 +41,7 @@ function get_tweet_callback(data) {
     tweetText.innerHTML = tweets[key]['text'];
     let tweetInferred = document.createElement("td");
     tweetInferred.setAttribute("id", "tweet_inferred" + key);
-    tweetInferred.style.backgroundColor = 'RED'; 
-    tweetInferred.innerHTML = "ZOOMIE 4 LYFE!!!"; 
+    tweetInferred.innerHTML = "&#129302;";
 
     let boxes = document.createElement("td")
     boxes.setAttribute("class", "inputBox_wrapper"); 
