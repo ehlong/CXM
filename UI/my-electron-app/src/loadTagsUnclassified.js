@@ -54,27 +54,29 @@ function loadTweetBoxes (n) {
     loadImgs();
     console.log(t_box.item(0)); 
 }
-
+let inferred = 1;
+let link;
 function getCheckBoxes(n, tweets) { 
     //  Create <div class="inputBox"> </div> 
     var boxes = document.createElement("div");
     boxes.setAttribute("class","inputBox"); 
-    //  Now for each class we make a input div with that specific classid and number an exmaple should be <input type="checkbox" id="positive1" name="classification1" value="positive"></input> 
-    for ( link of links ) { 
-        var box = document.createElement("input"); 
+    //  Now for each class we make a input div with that specific classid and number an exmaple should be <input type="checkbox" id="positive1" name="classification1" value="positive"></input>
+
+    for ( link of links ) {
+        var box = document.createElement("input");
         box.setAttribute("type", "checkbox"); 
         box.setAttribute("id", link + n); 
         box.setAttribute("name", "classification" + n); 
-        // box.setAttribute("value", ""); 
-        box.setAttribute("class", "class-box")
-
+        // box.setAttribute("value", "");
+        box.setAttribute("class", "class-box");
+        box.setAttribute("onChange", "checkInferred(" + link + "," + n + ")");
         //Check if tweet is there and if it matches with class, mark as checked.
         if(tweets != null) {
-            if(tweets['class'] == link) { 
+            if(tweets['class'] === link) {
                 box.checked = true;
                 box.setAttribute("value", tweets['class'])
             }
-            else if(tweets['class'] == "bugs/glitches" && link == "bugs") { 
+            else if(tweets['class'] === "bugs/glitches" && link === "bugs") {
                 box.checked = true;
                 box.setAttribute("value", tweets['class'])
             }
@@ -110,17 +112,32 @@ function getCheckBoxes(n, tweets) {
     return boxes; 
 }
 
-function get_new_tweets() { 
-    
+function checkInferred(c, n) {
+    let tweetInferred = document.getElementById("tweet_inferred");
+    let inputBox = document.getElementById("inputBox");
+    console.log(c+n);
+    if(document.getElementById(c+n).checked){
+        tweetInferred.innerHTML = "&#129302;";
+    } else {
+        tweetInferred.innerHTML = "";
+    }
+}
+
+function get_new_tweets() {
     try { 
         var n = document.getElementById("new_tweets_num"); 
         if(n.value < 1 || n.value > 30 )  {
             alert("Values only between 1-30!");
-
         }
         else { 
-            var tweet_box = document.getElementById("TweetTable"); 
-            tweet_box.innerHTML = ""; 
+            var tweet_box = document.getElementById("TweetTable");
+            tweet_box.innerHTML =
+                "<tr>" +
+                "<th>Tweet ID</th>" +
+                "<th>Date</th>" +
+                "<th>Tweet</th>" +
+                "<th>Inferred</th>" +
+                "<th>Class</th>" + "</tr>";
             // loadTweetBoxes(n.value); 
             httpGetAsync("http://127.0.0.1:5000/unclassified/" + n.value, get_tweet_callback);
         }
