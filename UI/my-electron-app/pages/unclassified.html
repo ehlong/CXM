@@ -13,7 +13,7 @@
 			// httpGetAsync is in rest.js
 			// get_tweet_callback is in classification.js
 			// the endpoint is run by the Flask_Server.py file
-
+			let submitted = 0;
 			httpGetAsync("http://127.0.0.1:5000/unclassified/10", get_tweet_callback);
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -65,6 +65,7 @@
 						<th>Tweet ID</th>
 						<th>Date</th>
 						<th>Tweet</th>
+						<th>Inferred</th>
 						<th>Class</th>
 					  </tr>
 				  </table>

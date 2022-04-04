@@ -19,64 +19,55 @@ function get_tweet_callback(data) {
   }
 
   let tweets = JSON.parse(data)
-  //console.log(tweets)
+  console.log(tweets)
   var i = 1;
   unclassified_results = [];
   let classRadioButton;
 
-  // document.getElementById("TweetBox").innerHTML =
-  //     "<table>" +
-  //         "<tr>" +
-  //           "<th>Tweet ID</th>" +
-  //           "<th>Date</th>" +
-  //           "<th>Tweet</th>" +
-  //           "<th>Class</th>" +
-  //         "</tr>" +
-  //     "</table>";
-
   for(var key in tweets) {
+    let elementId = "Tweet#" + (i).toString();
 
-      let elementId = "Tweet#" + (i).toString();
-//      console.log("Attempting to set tweet: " + elementId)
-//      console.log("to: " + tweets[key]);
-//       document.getElementById(elementId).innerHTML =
-      // "<h2>Tweet ID: " + key + "</h2>\n" +
-      // "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      // "<p>" + tweets[key]['text'] + "</p>";    
+    let table = document.getElementById("TweetTable");
+    let row = document.createElement("tr");
+    row.setAttribute("id", elementId); 
+    let tweetKey = document.createElement("td");
+    tweetKey.setAttribute("id", "tweet_id"); 
+    tweetKey.innerHTML = key;
+    let tweetDate = document.createElement("td");
+    tweetDate.setAttribute("id", "tweet_date"); 
+    tweetDate.innerHTML = tweets[key]['date']
+    let tweetText = document.createElement("td")
+    tweetText.setAttribute("id", "tweet_text");
+    tweetText.innerHTML = tweets[key]['text'];
+    let tweetInferred = document.createElement("td");
+    tweetInferred.setAttribute("id", "tweet_inferred" + key);
+    tweetInferred.innerHTML = "&#129302;";
 
-      let table = document.getElementById("TweetTable")
-      let row = document.createElement("tr")
-      row.setAttribute("id", elementId); 
-      let tweetKey = document.createElement("td")
-      tweetKey.setAttribute("id", "tweet_id"); 
-      tweetKey.innerHTML = key
-      let tweetDate = document.createElement("td")
-      tweetDate.setAttribute("id", "tweet_date"); 
-      tweetDate.innerHTML = tweets[key]['date']
-      let tweetText = document.createElement("td")
-      tweetText.setAttribute("id", "tweet_text"); 
-      tweetText.innerHTML = tweets[key]['text']
-      let boxes = document.createElement("td")
-      boxes.setAttribute("class", "inputBox_wrapper"); 
-      boxes.appendChild(getCheckBoxes(key))
+    let boxes = document.createElement("td")
+    boxes.setAttribute("class", "inputBox_wrapper"); 
 
-      row.appendChild(tweetKey)
-      row.appendChild(tweetDate)
-      row.appendChild(tweetText)
-      row.appendChild(boxes)
-      table.appendChild(row)
+    var checkboxes = getCheckBoxes(key, tweets[key]);
+    boxes.appendChild(checkboxes);
 
-      unclassified_results.push(key);
-      let clazz = tweets[key]['class'];
-      let classRadioButtonId = clazz + (i).toString();
-      console.log("Class: " + classRadioButtonId);
-      classRadioButton = document.getElementById(classRadioButtonId);
+    row.appendChild(tweetKey);
+    row.appendChild(tweetDate);
+    row.appendChild(tweetText);
+    row.appendChild(tweetInferred);
+    row.appendChild(boxes);
+    table.appendChild(row);
+
+    //   unclassified_results.push(key);
+    //   let clazz = tweets[key]['class'];
+    //   let classRadioButtonId = clazz + (i).toString();
+    //   console.log("Class: " + classRadioButtonId);
+    //   classRadioButton = document.getElementById(classRadioButtonId);
       //classRadioButton.checked = true;
       ++i;
   }
   loadImgs();
   showPage();
 }
+
 
 var results;
 function get_tweet_class_callback(data) {
@@ -88,19 +79,11 @@ function get_tweet_class_callback(data) {
       if(i === 26){
           break;
       }
-      // document.getElementById(elementId).innerHTML =
-      // "<h2>Tweet ID: " + key + "</h2>\n" +
-      // "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      // "<p>" + tweets[key]['text'] + "</p>\n" +
-      // "<p>class: " + tweets[key]['class'] + "</p>";
-
-      $("#TweetTable tbody").append(
-          "<tr>" +
-            "<td>" + key + "</td>" +
-            "<td>" + tweets[key]['date'] + "</td>" +
-            "<td>" + tweets[key]['text'] + "</td>"
-      );
-
+      document.getElementById(elementId).innerHTML =
+      "<h2>Tweet ID: " + key + "</h2>\n" +
+      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
+      "<p>" + tweets[key]['text'] + "</p>\n" +
+      "<p>class: " + tweets[key]['class'] + "</p>";
   }
   showPage();
   results = tweets;
@@ -176,7 +159,8 @@ function retrain() {
     }
 }
 
-function put_tweets_json () { 
+function put_tweets_json () {
+    submitted = 1;
     var big_class = {} 
     var ids = []
     var values = []
