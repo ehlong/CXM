@@ -40,13 +40,10 @@ function get_tweet_callback(data) {
     tweetText.setAttribute("id", "tweet_text");
     tweetText.innerHTML = tweets[key]['text'];
     let tweetInferred = document.createElement("td");
-    tweetInferred.setAttribute("id", "tweet_inferred");
-    // checkInferred();
-      // do {
-      //     if(class === link){
-      //       tweetInferred.innerHTML = "&#129302;"; // robot emoji
-      //     }
-      // } while(!submitted);
+    tweetInferred.setAttribute("id", "tweet_inferred" + key);
+    tweetInferred.style.backgroundColor = 'RED'; 
+    tweetInferred.innerHTML = "ZOOMIE 4 LYFE!!!"; 
+
     let boxes = document.createElement("td")
     boxes.setAttribute("class", "inputBox_wrapper"); 
 

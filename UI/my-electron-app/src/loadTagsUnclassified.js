@@ -17,43 +17,43 @@ function loadImgs() {
 }
 
 
-function loadTweetBoxes (n) { 
-    //  This function will load tweet boxes in by tweet 
+// function loadTweetBoxes (n) { 
+//     //  This function will load tweet boxes in by tweet 
 
-    //  First grab the tag that we are inserting into
-    let t_box = document.getElementsByClassName("TweetBox"); 
+//     //  First grab the tag that we are inserting into
+//     let t_box = document.getElementsByClassName("TweetBox"); 
 
-    //  Create simple loop for how many tweets we want to create a box for. 
-    for(var i =1; i <= n; i++) { 
-        // We create the outer div tag and set attributes 
-        // ex <div id ="Tweet#1 class="tweet"> </div>"
-        var tweet = document.createElement("div"); 
-        tweet.setAttribute("id", "Tweet#" + i); 
-        tweet.setAttribute("class", "tweet"); 
+//     //  Create simple loop for how many tweets we want to create a box for. 
+//     for(var i =1; i <= n; i++) { 
+//         // We create the outer div tag and set attributes 
+//         // ex <div id ="Tweet#1 class="tweet"> </div>"
+//         var tweet = document.createElement("div"); 
+//         tweet.setAttribute("id", "Tweet#" + i); 
+//         tweet.setAttribute("class", "tweet"); 
         
-        //  Set the inner html elements, this is when tweet does not load(this should be over written when we grab tweets) 
-        tweet.innerHTML = 
-        "<h2>TweetID </h2>" + '\n' + 
-        "<p> Tweet Stuffs </p>"; 
+//         //  Set the inner html elements, this is when tweet does not load(this should be over written when we grab tweets) 
+//         tweet.innerHTML = 
+//         "<h2>TweetID </h2>" + '\n' + 
+//         "<p> Tweet Stuffs </p>"; 
 
-        //  create another div that will wrap entire thing into a wrapper and insert it
-        var wrapper = document.createElement("div"); 
-        wrapper.setAttribute("class", "tweet_wrapper");
-        wrapper.appendChild(tweet);
+//         //  create another div that will wrap entire thing into a wrapper and insert it
+//         var wrapper = document.createElement("div"); 
+//         wrapper.setAttribute("class", "tweet_wrapper");
+//         wrapper.appendChild(tweet);
 
-        //We create inputs and insert it inside the wrapper div (this should be on same level as the tweet itself.)
-        var checkboxes = getCheckBoxes(i); 
-        wrapper.appendChild(checkboxes);
+//         //We create inputs and insert it inside the wrapper div (this should be on same level as the tweet itself.)
+//         var checkboxes = getCheckBoxes(i); 
+//         wrapper.appendChild(checkboxes);
 
-        //  Finally insert into html TweetBox from earlier.
-        t_box.item(0).appendChild(wrapper);  
+//         //  Finally insert into html TweetBox from earlier.
+//         t_box.item(0).appendChild(wrapper);  
         
 
 
-    }
-    loadImgs();
-    console.log(t_box.item(0)); 
-}
+//     }
+//     loadImgs();
+//     console.log(t_box.item(0)); 
+// }
 let inferred = 1;
 let link;
 function getCheckBoxes(n, tweets) { 
@@ -69,18 +69,19 @@ function getCheckBoxes(n, tweets) {
         box.setAttribute("name", "classification" + n); 
         // box.setAttribute("value", "");
         box.setAttribute("class", "class-box");
-        box.setAttribute("onChange", "checkInferred(" + link + "," + n + ")");
+
         //Check if tweet is there and if it matches with class, mark as checked.
         if(tweets != null) {
-            if(tweets['class'] === link) {
-                box.checked = true;
-                box.setAttribute("value", tweets['class'])
+            if(tweets['class'] === link || (tweets['class'] === "bugs/glitches" && link === "bugs")) {
+                box.setAttribute("onchange", "checkInferred(" + link +  n + ");");
+                box.setAttribute("value", n); 
+
+                box.checked = true; 
+                // robot_head.style.backgroundColor = "RED"; 
+                // robot_head.innerHTML = "ZOOMIE 4 LYFE"; 
             }
-            else if(tweets['class'] === "bugs/glitches" && link === "bugs") {
-                box.checked = true;
-                box.setAttribute("value", tweets['class'])
-            }
-        }
+
+        } 
 
         //  Create label div <label for="bugs/glitches1"
         var l = document.createElement("div"); 
@@ -112,16 +113,23 @@ function getCheckBoxes(n, tweets) {
     return boxes; 
 }
 
-function checkInferred(c, n) {
-    let tweetInferred = document.getElementById("tweet_inferred");
-    let inputBox = document.getElementById("inputBox");
-    console.log(c+n);
-    if(document.getElementById(c+n).checked){
-        tweetInferred.innerHTML = "&#129302;";
-    } else {
-        tweetInferred.innerHTML = "";
+function checkInferred(c) {
+    console.log(c);
+    let id = c.value;
+    let tweetInferred = document.getElementById("tweet_inferred" + id);
+
+
+    if(c.checked == true) { 
+
+        tweetInferred.innerHTML = "ZOOMIE 4 LYFE!!!"
+        tweetInferred.style.backgroundColor = "RED"
+    }
+    else { 
+        tweetInferred.innerHTML = ""
+        tweetInferred.style.backgroundColor = "WHITE"
     }
 }
+
 
 function get_new_tweets() {
     try { 
