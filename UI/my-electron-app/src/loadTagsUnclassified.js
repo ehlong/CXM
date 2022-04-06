@@ -66,9 +66,9 @@ function getCheckBoxes(n, tweets) {
         var box = document.createElement("input");
         box.setAttribute("type", "checkbox"); 
         box.setAttribute("id", link + n); 
-        box.setAttribute("name", "classification" + n); 
+        box.setAttribute("name", link); 
         // box.setAttribute("value", "");
-        box.setAttribute("class", "class-box");
+        box.setAttribute("class", n);
 
         //Check if tweet is there and if it matches with class, mark as checked.
         if(tweets != null) {
@@ -114,7 +114,7 @@ function getCheckBoxes(n, tweets) {
 }
 
 function checkInferred(c) {
-    console.log(c);
+    //console.log(c);
     let id = c.value;
     let tweetInferred = document.getElementById("tweet_inferred" + id);
 

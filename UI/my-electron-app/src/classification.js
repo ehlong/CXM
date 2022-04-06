@@ -56,12 +56,6 @@ function get_tweet_callback(data) {
     row.appendChild(boxes);
     table.appendChild(row);
 
-    //   unclassified_results.push(key);
-    //   let clazz = tweets[key]['class'];
-    //   let classRadioButtonId = clazz + (i).toString();
-    //   console.log("Class: " + classRadioButtonId);
-    //   classRadioButton = document.getElementById(classRadioButtonId);
-      //classRadioButton.checked = true;
       ++i;
   }
   loadImgs();
@@ -160,45 +154,31 @@ function retrain() {
 }
 
 function put_tweets_json () {
-    submitted = 1;
-    var big_class = {} 
-    var ids = []
-    var values = []
-    var checked = document.getElementsByTagName('input');
+        let checkboxes = document.getElementsByTagName('input');
+        var m = new Map(); 
+        
+        for(let i in checkboxes) { 
+            if (checkboxes[i].type != 'checkbox') { 
+                continue; 
+            }
+            var tweet_id = parseInt(checkboxes[i].className);
 
-    //Grab ids that are presented to user.
-    for(var i =0; i < unclassified_results.length;i++) { 
-        ids.push(unclassified_results[i]);
-    }
+            if(!m.has(tweet_id)) { 
+                m.set(tweet_id, []);
+            }
 
-    //Grab each of the  checked radio values (classifications)
-    for(var i =0; i < checked.length;i++) {
-        var user_class = checked[i]
-        if(user_class.checked == true) { 
-        values.push(user_class.value); 
+            if (checkboxes[i].checked == true) {  
+                    m.get(tweet_id).push(checkboxes[i].name); 
+            }
         }
-    }
-
-    //If user didn't check all the boxes then error.
-    if(ids.length != values.length) { 
-        alert("Please input all values before committing");
-    }
-    else { 
-        for (var i =0; i< ids.length;i++ ) {
-            // var data = JSON.stringify({
-            //     'id': ids[i], 
-            //     'class': values[i]
-            //     });
-
-            // httpPutAsync("http://127.0.0.1:5000/unclassified/", data);
-            // Use this setup for one at a time.
-            big_class[ids[i]] = values[i];
+        for( arr of m.values()) { 
+            if(arr.length == 0) { 
+                alert("All tweets not classified!!");
+                return;
+            }
         }
-        var data = JSON.stringify(big_class);
-        // console.log(data);
 
-        var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
-        console.log("HERE" + n_tweets); 
-        httpPutAsync("http://127.0.0.1:5000/unclassified/20", data, get_tweet_callback);
-    }
+        //console.log(m);     
+       // httpPutAsync("http://127.0.0.1:5000/unclassified/20", data, get_tweet_callback);
+    
 }
