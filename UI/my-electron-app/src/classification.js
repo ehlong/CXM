@@ -177,6 +177,8 @@ function put_tweets_json () {
                 return;
             }
         }
+    
+        console.log(JSON.stringify(Object.fromEntries(m)));
 
         //console.log(m);     
        // httpPutAsync("http://127.0.0.1:5000/unclassified/20", data, get_tweet_callback);
