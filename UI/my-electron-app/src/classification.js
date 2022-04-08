@@ -94,9 +94,6 @@ function get_tweet_class_callback(data) {
         "<img class=\"" + clazz + "-color\" src=\"../img/svgs/" + clazz + "-color.svg\" alt=\"check\" title=\"" + clazz.toUpperCase() + "\"/>";
 
 
-
-
-
         row.appendChild(tweet_id);
         row.appendChild(date);
         row.appendChild(text);

@@ -72,14 +72,22 @@ function getCheckBoxes(n, tweets) {
 
         //Check if tweet is there and if it matches with class, mark as checked.
         if(tweets != null) {
-            if(tweets['class'] === link || (tweets['class'] === "bugs/glitches" && link === "bugs")) {
-                box.setAttribute("onchange", "checkInferred(" + link +  n + ");");
-                box.setAttribute("value", n); 
-
-                box.checked = true; 
-                // robot_head.style.backgroundColor = "RED"; 
-                // robot_head.innerHTML = "ZOOMIE 4 LYFE"; 
+            if(typeof tweets['class'] === 'string') { 
+                if(tweets['class'] === link || (tweets['class'] === "bugs/glitches" && link === "bugs")) {
+                    //box.setAttribute("onchange", "checkInferred(" + link +  n + ");");
+                    box.setAttribute("value", n); 
+                    box.checked = true; 
+                    } 
             }
+            else if(Array.isArray(tweets['class'])) { 
+                if(tweets['class'].includes(link) || tweets['class'].includes("bugs/gltiches") && link == "bugs")  { 
+                    box.setAttribute("onchange", "checkInferred(" + link +  n + ");");
+                    box.setAttribute("value", n); 
+                    box.cehcked = true; 
+                }
+                
+            }
+            box.setAttribute("onchange", "checkInferred(" + link +  n + ");");
 
         } 
 
@@ -114,19 +122,33 @@ function getCheckBoxes(n, tweets) {
 }
 
 function checkInferred(c) {
-    //console.log(c);
-    let id = c.value;
+    let id = c.className;
     let tweetInferred = document.getElementById("tweet_inferred" + id);
+    let inferred = false;
+    let inputs = document.getElementsByClassName(id); 
 
+    var a = [] 
+    var b = [] 
 
-    if(c.checked == true) {
+    for( var i of inputs) { 
+        if(i.hasAttribute('value')) { 
+            a.push(i.name);
+        }
+    }
+    for(var i of inputs) { 
+        if(i.checked == true) { 
+            b.push(i.name); 
+        }
+    }
+    console.log(a);
+    console.log(b); 
+    if (a.sort().toString() == b.sort().toString()) { 
         tweetInferred.innerHTML = "&#129302;";
     }
     else { 
-        tweetInferred.innerHTML = ""
+        tweetInferred.innerHTML = ""; 
     }
 }
-
 
 function get_new_tweets() {
     try { 
