@@ -65,22 +65,46 @@ function get_tweet_callback(data) {
 
 var results;
 function get_tweet_class_callback(data) {
-  var tweets = JSON.parse(data)
-  //console.log(tweets)
-  var i = 0;
-  for(var key in tweets) {
-      let elementId = "Tweet#" + (++i).toString();
-      if(i === 26){
-          break;
-      }
-      document.getElementById(elementId).innerHTML =
-      "<h2>Tweet ID: " + key + "</h2>\n" +
-      "<p>Date: " + tweets[key]['date'] + "</p>\n" +
-      "<p>" + tweets[key]['text'] + "</p>\n" +
-      "<p>class: " + tweets[key]['class'] + "</p>";
-  }
-  showPage();
-  results = tweets;
+    var tweets = JSON.parse(data);
+    console.log(tweets); 
+    var table = document.getElementById("TweetTable"); 
+
+
+    for (var key in tweets) { 
+        var row = document.createElement("tr"); 
+        row.setAttribute('id', tweets[key] ); 
+
+        var tweet_id = document.createElement("td"); 
+        tweet_id.setAttribute("id", "classified_tweet_id"); 
+        tweet_id.innerHTML = key;
+
+        var date = document.createElement("td"); 
+        date.setAttribute("id", "classified_tweet_date");
+        date.innerHTML = tweets[key]['date'];
+
+        var text = document.createElement("td"); 
+        text.setAttribute("id", "classified_tweet_text"); 
+        text.innerHTML = tweets[key]['text']; 
+
+        var class_img = document.createElement("td");
+        class_img.setAttribute("id", "classified_img");
+
+        var clazz = tweets[key]['class'] === "bugs/glitches" ? "bugs" : tweets[key]['class'];
+        class_img.innerHTML =  
+        "<img class=\"" + clazz + "-color\" src=\"../img/svgs/" + clazz + "-color.svg\" alt=\"check\" title=\"" + clazz.toUpperCase() + "\"/>";
+
+
+
+
+
+        row.appendChild(tweet_id);
+        row.appendChild(date);
+        row.appendChild(text);
+        row.appendChild(class_img);
+        table.appendChild(row); 
+    }
+    showPage();
+    results = tweets;
 }
 
 
