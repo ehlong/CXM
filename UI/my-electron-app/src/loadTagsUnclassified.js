@@ -16,44 +16,6 @@ function loadImgs() {
     }
 }
 
-
-// function loadTweetBoxes (n) { 
-//     //  This function will load tweet boxes in by tweet 
-
-//     //  First grab the tag that we are inserting into
-//     let t_box = document.getElementsByClassName("TweetBox"); 
-
-//     //  Create simple loop for how many tweets we want to create a box for. 
-//     for(var i =1; i <= n; i++) { 
-//         // We create the outer div tag and set attributes 
-//         // ex <div id ="Tweet#1 class="tweet"> </div>"
-//         var tweet = document.createElement("div"); 
-//         tweet.setAttribute("id", "Tweet#" + i); 
-//         tweet.setAttribute("class", "tweet"); 
-        
-//         //  Set the inner html elements, this is when tweet does not load(this should be over written when we grab tweets) 
-//         tweet.innerHTML = 
-//         "<h2>TweetID </h2>" + '\n' + 
-//         "<p> Tweet Stuffs </p>"; 
-
-//         //  create another div that will wrap entire thing into a wrapper and insert it
-//         var wrapper = document.createElement("div"); 
-//         wrapper.setAttribute("class", "tweet_wrapper");
-//         wrapper.appendChild(tweet);
-
-//         //We create inputs and insert it inside the wrapper div (this should be on same level as the tweet itself.)
-//         var checkboxes = getCheckBoxes(i); 
-//         wrapper.appendChild(checkboxes);
-
-//         //  Finally insert into html TweetBox from earlier.
-//         t_box.item(0).appendChild(wrapper);  
-        
-
-
-//     }
-//     loadImgs();
-//     console.log(t_box.item(0)); 
-// }
 let inferred = 1;
 let link;
 function getCheckBoxes(n, tweets) { 

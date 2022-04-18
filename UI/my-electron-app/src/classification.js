@@ -1,6 +1,6 @@
 // parses the data from a get request for unclassified tweets
-
-var unclassified_results = [];
+var all_data = {}; 
+let range = [0,10]; 
 
 function showPage() {
     document.getElementById("loader").style.display = "none";
@@ -9,20 +9,10 @@ function showPage() {
 }
 
 function get_tweet_callback(data) {
-  let element;
-  var n_tweets = document.getElementsByClassName("tweet_wrapper").length;
-  for(let j = 1; j<n_tweets; j++){
-      element = document.getElementsByName("classification" + j);
-      for(let k = 0; k<element.length; k++){
-          element[k].checked = false;
-      }
-  }
 
   let tweets = JSON.parse(data)
-  console.log(tweets)
+  all_data = tweets; 
   var i = 1;
-  unclassified_results = [];
-  let classRadioButton;
 
   for(var key in tweets) {
     let elementId = "Tweet#" + (i).toString();
@@ -57,9 +47,65 @@ function get_tweet_callback(data) {
     table.appendChild(row);
 
       ++i;
+    if(i > range[1]) { 
+        break;
+    }
   }
   loadImgs();
   showPage();
+}
+
+function nextPage(n) { 
+    if( (n > 0 && range[1] == Object.keys(all_data).length) || (n < 0 && range[0] <= 0)) { 
+        return
+    }
+
+    range[0] += n;
+    range[1] += n;
+    var i = 0; 
+    let table = document.getElementById("TweetTable");
+    table.innerHTML = "" 
+    for(var key in all_data) { 
+        i++; 
+        if(i > range[0] && i <= range[1]) { 
+            let elementId = "Tweet#" + (i).toString();
+
+            let row = document.createElement("tr");
+            row.setAttribute("id", elementId); 
+
+            let tweetKey = document.createElement("td");
+            tweetKey.setAttribute("id", "tweet_id"); 
+            tweetKey.innerHTML = key;
+
+            let tweetDate = document.createElement("td");
+            tweetDate.setAttribute("id", "tweet_date"); 
+            tweetDate.innerHTML = all_data[key]['date']
+
+            let tweetText = document.createElement("td")
+            tweetText.setAttribute("id", "tweet_text");
+            tweetText.innerHTML = all_data[key]['text'];
+            
+            let tweetInferred = document.createElement("td");
+            tweetInferred.setAttribute("id", "tweet_inferred" + key);
+            tweetInferred.innerHTML = "&#129302;";
+        
+            let boxes = document.createElement("td")
+            boxes.setAttribute("class", "inputBox_wrapper"); 
+        
+            var checkboxes = getCheckBoxes(key, all_data[key]);
+            boxes.appendChild(checkboxes);
+        
+            row.appendChild(tweetKey);
+            row.appendChild(tweetDate);
+            row.appendChild(tweetText);
+            row.appendChild(tweetInferred);
+            row.appendChild(boxes);
+            table.appendChild(row); 
+        }
+    }
+    loadImgs();
+
+    console.log(range)
 }
 
 

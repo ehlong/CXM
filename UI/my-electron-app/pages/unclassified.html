@@ -14,7 +14,7 @@
 			// get_tweet_callback is in classification.js
 			// the endpoint is run by the Flask_Server.py file
 			let submitted = 0;
-			httpGetAsync("http://127.0.0.1:5000/unclassified/10", get_tweet_callback);
+			httpGetAsync("http://127.0.0.1:5000/unclassified/1000", get_tweet_callback);
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="../styles/styles.css" rel="stylesheet" />
@@ -70,6 +70,9 @@
 					  </tr>
 				  </table>
 				</div>
+				<button type="button" onclick="nextPage(-10)">Previous Page</button>
+				<button type="button" onclick="nextPage(10)">Next Page</button>
+				<br>
 				<br>
 				<div style="text-align: center;">
 					<label class="sub-button1">
