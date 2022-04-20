@@ -84,7 +84,7 @@ function nextPage(n) {
             let tweetText = document.createElement("td")
             tweetText.setAttribute("id", "tweet_text");
             tweetText.innerHTML = all_data[key]['text'];
-            
+
             let tweetInferred = document.createElement("td");
             tweetInferred.setAttribute("id", "tweet_inferred" + key);
             tweetInferred.innerHTML = "&#129302;";
@@ -112,7 +112,7 @@ function nextPage(n) {
 var results;
 function get_tweet_class_callback(data) {
     var tweets = JSON.parse(data);
-    console.log(tweets); 
+    //console.log(tweets); 
     var table = document.getElementById("TweetTable"); 
 
 
@@ -152,43 +152,68 @@ function get_tweet_class_callback(data) {
 
 
 function filter_json(data){
-    let filteredResults = [];
-    if($(data).is(":checked")){
-        filteredResults = Object.values(results)
-            .filter(
-                function(result){
-                    return result.class === data.value;
-                }
-            );
-        var i = 0;
-        for(var key in filteredResults) {
-            let elementId = "Tweet#" + (++i).toString();
-            if(i === 26){
-                break;
-            }
-            document.getElementById(elementId).innerHTML =
-                  "<h2>Tweet: " + "</h2>\n" +
-                  "<p>Date: " + filteredResults[key]['date'] + "</p>\n" +
-                  "<p>" + filteredResults[key]['text'] + "</p>\n" +
-                  "<p>class: " + filteredResults[key]['class'] + "</p>";
+    //console.log(data); 
+    var active_sliders = []
+    var headers = ['Tweet ID', 'Date', 'Tweet', 'Class']; 
+    var table_header = get_table_headers(headers); 
 
+    for (var i of document.getElementsByTagName("input")) { 
+        if (i.type != "checkbox") {
+            continue; 
         }
-
-    }
-    if(!$(data).is(":checked")){
-        var i = 0;
-        for(var key in results) {
-            let elementId = "Tweet#" + (++i).toString();
-            if(i === 26){
-                break;
+        if(i.checked == true) { 
+            if(i.id == 'bugs') { 
+                active_sliders.push('bugs/glitches'); 
             }
-            document.getElementById(elementId).innerHTML =
-                "<h2>Tweet ID: " + key + "</h2>\n" +
-                "<p>Date: " + results[key]['date'] + "</p>\n" +
-                "<p>" + results[key]['text'] + "</p>\n" +
-                "<p>class: " + results[key]['class'] + "</p>";
+            else { 
+                active_sliders.push(i.id); 
+            }
         }
     }
+    //console.log(active_sliders); 
+
+    var table = document.createElement('table'); 
+    table.setAttribute('id', 'TweetTable');
+    table.appendChild(table_header); 
+    for (var key in results) { 
+        if (active_sliders.includes(results[key]['class']) == false && active_sliders.length != 0) { 
+            continue; 
+        } 
+        var row = document.createElement("tr"); 
+        row.setAttribute('id', results[key] ); 
+
+        var tweet_id = document.createElement("td"); 
+        tweet_id.setAttribute("id", "classified_tweet_id"); 
+        tweet_id.innerHTML = key;
+
+        var date = document.createElement("td"); 
+        date.setAttribute("id", "classified_tweet_date");
+        date.innerHTML = results[key]['date'];
+
+        var text = document.createElement("td"); 
+        text.setAttribute("id", "classified_tweet_text"); 
+        text.innerHTML = results[key]['text']; 
+
+        var class_img = document.createElement("td");
+        class_img.setAttribute("id", "classified_img");
+
+        var clazz = results[key]['class'] === "bugs/glitches" ? "bugs" : results[key]['class'];
+        class_img.innerHTML =  
+        "<img class=\"" + clazz + "-color\" src=\"../img/svgs/" + clazz + "-color.svg\" alt=\"check\" title=\"" + clazz.toUpperCase() + "\"/>";
+
+        row.appendChild(tweet_id);
+        row.appendChild(date);
+        row.appendChild(text);
+        row.appendChild(class_img);
+        table.appendChild(row); 
+
+        // console.log(id);
+        // console.log(results[id]);
+    }
+    var tweetbox = document.getElementById('TweetBox')
+    tweetbox.innerHTML = ''; 
+    table.setAttribute('border', '1');
+    tweetbox.appendChild(table);
 }
 
 let already_training = false;
@@ -218,6 +243,20 @@ function retrain() {
         //we are training the model
         alert("We're already training the model!");
     }
+}
+
+function get_table_headers(ar) { 
+    var header = document.createElement('tbody');
+    var sub_header = document.createElement('tr'); 
+
+    for(var i of ar) { 
+        var text = document.createElement('th'); 
+
+        text.innerHTML = i; 
+        sub_header.appendChild(text); 
+    }
+    header.appendChild(sub_header); 
+    return header; 
 }
 
 function put_tweets_json () {
