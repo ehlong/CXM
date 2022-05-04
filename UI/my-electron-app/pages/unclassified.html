@@ -53,11 +53,6 @@
 						<input type="submit" value="Fetch New Tweets" onclick="window.location.reload();" />
 					</label>
 				</div>
-				<form onsubmit="return false">
-					<br><label>View Size 1-30</label>
-					<input type="number" id="new_tweets_num" min="1" max="30">
-					<button type="button" onclick=get_new_tweets()>Load Count</button>
-				</form>
 				<br>
 				<div id="TweetBox" class="TweetBox">
 				  <table id="TweetTable" border="1">
@@ -70,11 +65,11 @@
 					  </tr>
 				  </table>
 				</div>
-				<button type="button" onclick="nextPage(-10)">Previous Page</button>
-				<button type="button" onclick="nextPage(10)">Next Page</button>
-				<br>
-				<br>
 				<div style="text-align: center;">
+					<button class="sub-button1" type="button" onclick="nextPage(-10)">Previous Page</button>
+					<button class="sub-button1" type="button" onclick="nextPage(10)">Next Page</button>
+					<br>
+					<br>
 					<label class="sub-button1">
 						<input id= "submitButton" type="submit" value="Commit All Classsified" onclick= put_tweets_json() />
 					</label>
@@ -83,7 +78,5 @@
 		</div>
 		<script src="../src/openNav.js"></script>
 		<script src="../src/renderer.js"></script>
-<!--		Modal is getting in the way of console.log out json output. we'll leave this commented out for the demo -->
-<!--		<script src="../src/modal.js"></script>-->
 	</body>
 </html>

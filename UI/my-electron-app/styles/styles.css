@@ -177,6 +177,18 @@ input[type="submit"] {
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
+button[type="button"] {
+	padding-top: 10px;
+	color:white;
+	width: auto;
+	height: 34px;
+	padding: 5px 15px;
+	background: #1da1f2;
+	border: 0 none;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 
 input[type="submit"]:hover {
 	color: white;

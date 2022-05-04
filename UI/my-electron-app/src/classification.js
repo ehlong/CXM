@@ -14,7 +14,10 @@ function get_tweet_callback(data) {
   all_data = tweets; 
   var i = 1;
 
-  for(var key in tweets) {
+    var idz = Object.keys(tweets).sort().reverse()
+
+  for(var j = 0; j < idz.length; j++ ) { 
+    var key = idz[j]; 
     let elementId = "Tweet#" + (i).toString();
 
     let table = document.getElementById("TweetTable");
@@ -44,6 +47,9 @@ function get_tweet_callback(data) {
     row.appendChild(tweetText);
     row.appendChild(tweetInferred);
     row.appendChild(boxes);
+    // if(i % 2 == 0) { 
+    //     row.style.backgroundColor = " #f6f6f6 "
+    // }
     table.appendChild(row);
 
       ++i;
@@ -65,9 +71,13 @@ function nextPage(n) {
     var i = 0; 
     let table = document.getElementById("TweetTable");
     table.innerHTML = "" 
-    for(var key in all_data) { 
+    table.appendChild(get_table_headers(["Tweet ID", "Date", "Tweet", "Inferred", "Class"]))
+
+    var idz = Object.keys(all_data).sort().reverse()
+    for (var j =0; j < idz.length; j ++)  { 
         i++; 
         if(i > range[0] && i <= range[1]) { 
+            key = idz[i]; 
             let elementId = "Tweet#" + (i).toString();
 
             let row = document.createElement("tr");
@@ -100,19 +110,20 @@ function nextPage(n) {
             row.appendChild(tweetText);
             row.appendChild(tweetInferred);
             row.appendChild(boxes);
+            // if(i % 2 == 0) { 
+            //     row.style.backgroundColor = " #f6f6f6 "
+            // }
             table.appendChild(row); 
         }
     }
+    scroll(0,0)
     loadImgs();
-
-    console.log(range)
 }
 
 
 var results;
 function get_tweet_class_callback(data) {
     var tweets = JSON.parse(data);
-    //console.log(tweets); 
     var table = document.getElementById("TweetTable"); 
 
 
@@ -152,7 +163,6 @@ function get_tweet_class_callback(data) {
 
 
 function filter_json(data){
-    //console.log(data); 
     var active_sliders = []
     var headers = ['Tweet ID', 'Date', 'Tweet', 'Class']; 
     var table_header = get_table_headers(headers); 
@@ -170,7 +180,6 @@ function filter_json(data){
             }
         }
     }
-    //console.log(active_sliders); 
 
     var table = document.createElement('table'); 
     table.setAttribute('id', 'TweetTable');
@@ -205,10 +214,8 @@ function filter_json(data){
         row.appendChild(date);
         row.appendChild(text);
         row.appendChild(class_img);
-        table.appendChild(row); 
+        table.appendChild(row);
 
-        // console.log(id);
-        // console.log(results[id]);
     }
     var tweetbox = document.getElementById('TweetBox')
     tweetbox.innerHTML = ''; 
@@ -284,9 +291,8 @@ function put_tweets_json () {
             }
         }
     
-        console.log(JSON.stringify(Object.fromEntries(m)));
-
-        //console.log(m);     
-       // httpPutAsync("http://127.0.0.1:5000/unclassified/20", data, get_tweet_callback);
+        data = JSON.stringify(Object.fromEntries(m));    
+        console.log(data);
+        httpPutAsync("http://127.0.0.1:5000/unclassified/" + m.size, data, get_tweet_callback);
     
 }
