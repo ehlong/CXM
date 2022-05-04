@@ -14,7 +14,7 @@
 			// get_tweet_callback is in classification.js
 			// the endpoint is run by the Flask_Server.py file
 			let submitted = 0;
-			httpGetAsync("http://127.0.0.1:5000/unclassified/1000", get_tweet_callback);
+			httpGetAsync("http://127.0.0.1:5000/unclassified/100", get_tweet_callback);
 		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="../styles/styles.css" rel="stylesheet" />
@@ -66,12 +66,13 @@
 				  </table>
 				</div>
 				<div style="text-align: center;">
+					<br><br>
 					<button class="sub-button1" type="button" onclick="nextPage(-10)">Previous Page</button>
 					<button class="sub-button1" type="button" onclick="nextPage(10)">Next Page</button>
 					<br>
 					<br>
 					<label class="sub-button1">
-						<input id= "submitButton" type="submit" value="Commit All Classsified" onclick= put_tweets_json() />
+						<input id= "submitButton" type="submit" value="Commit All Classsified" onclick="put_tweets_json(), window.location.reload();" />
 					</label>
 				</div>
 			</div>

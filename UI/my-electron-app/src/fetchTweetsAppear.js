@@ -5,7 +5,10 @@ var sayings = [
     "Fetching Epic tweets...",
     "Ratio'd...",
     "Dispatching carrier pigeons...",
-    "Losing sleep..."
+    "Losing sleep...",
+    "Performing string operations...",
+    "Ritta...",
+    "More coffee..."
 ];
 
 var randomNumber = Math.floor(Math.random()*sayings.length);

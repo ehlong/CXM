@@ -65,7 +65,8 @@ def put_unclassified(num):
     tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
 
     for tweet in tweets:
-        tweet['class'] = request.json.get(str(tweet['id']))
+        print(request.json.get(str(tweet['id']))[0])
+        tweet['class'] = request.json.get(str(tweet['id']))[0]
 
     Database_Api.update_collection(collection, tweets)
 

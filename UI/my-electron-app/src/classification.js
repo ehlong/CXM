@@ -280,8 +280,12 @@ function put_tweets_json () {
                 m.set(tweet_id, []);
             }
 
-            if (checkboxes[i].checked == true) {  
-                    m.get(tweet_id).push(checkboxes[i].name); 
+            if (checkboxes[i].checked == true) {
+                if(checkboxes[i].name === "bugs"){
+                    m.get(tweet_id).push("bugs/glitches");
+                } else {
+                    m.get(tweet_id).push(checkboxes[i].name);
+                }
             }
         }
         for( arr of m.values()) { 
