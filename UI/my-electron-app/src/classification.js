@@ -274,7 +274,7 @@ function put_tweets_json () {
             if (checkboxes[i].type != 'checkbox') { 
                 continue; 
             }
-            var tweet_id = parseInt(checkboxes[i].className);
+            var tweet_id = checkboxes[i].className;
 
             if(!m.has(tweet_id)) { 
                 m.set(tweet_id, []);
@@ -294,5 +294,4 @@ function put_tweets_json () {
         data = JSON.stringify(Object.fromEntries(m));    
         console.log(data);
         httpPutAsync("http://127.0.0.1:5000/unclassified/" + m.size, data, get_tweet_callback);
-    
 }

@@ -60,7 +60,6 @@ def retrieve_unclassified(num):
 def put_unclassified(num):
     # get the ids
     ids = [int(val) for val in request.json]
-    print(ids)
     query = {'id': {'$in': ids}}
     # get the tweets matching those ids
     tweets = list(collection.find(query).sort('id', pymongo.ASCENDING))
