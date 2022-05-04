@@ -2,8 +2,7 @@ import os
 import pickle
 
 from Database_Api import fetch_all_classified_tweets as fetch, \
-    update_collection, get_database_collection
-import bert_experiment
+    fetch_all_unclassified_tweets as fetch_un
 import pandas as pd
 import numpy as np
 import re
@@ -85,8 +84,13 @@ def preprocess_data():
     vectorizer = CountVectorizer(ngram_range=(1, 1))
     x = vectorizer.fit_transform(tweets).toarray()
 
-    y = df['class'].to_numpy()
+    ### Testing
+    filename = "vectorizer.pickle"
+    location = os.path.join("..", "models", filename)
+    pickle.dump(vectorizer, open(location, 'wb+'))
 
+    ### Testing
+    y = df['class'].to_numpy()
     # print out the number of times each word appears
     df = pd.DataFrame(data=x, columns=vectorizer.get_feature_names_out())
     print("The 10 most common words are: ")
@@ -96,6 +100,30 @@ def preprocess_data():
     feature_names = np.array(vectorizer.get_feature_names_out())
     # return x, y
     return x, y, feature_names
+
+
+# Fetch data from database unless supplied
+def preprocess_unclass_data(data=None):
+    filename = "vectorizer.pickle"
+    location = os.path.join("..", "models", filename)
+    vectorizer = pickle.load(open(location, 'rb'))
+    vectorizer.set_params(vocabulary=vectorizer.get_feature_names_out())
+    if data is None:
+        data = fetch_un()
+    df = pd.DataFrame(data)
+    # turn text into bag of words vectors
+    tweets = df['text'].to_numpy()
+    tokenizer = spacy.load('en_core_web_sm')
+    tweets = np.vectorize(strip_links)(tweets)
+    tweets = np.array([lemmatize(t, tokenizer) for t in tweets])
+
+    # vectorizer = CountVectorizer(ngram_range=(1, 1))
+    x = vectorizer.fit_transform(tweets).toarray()
+
+    processed_tweet_map = [{'id': row['id'],'text': x[i]} for i, row in df.iterrows()]
+
+    # return x, y
+    return processed_tweet_map
 
 
 def split_data_by_class_cv(train, test, feature_names):
@@ -110,7 +138,7 @@ def split_data_by_class_cv(train, test, feature_names):
         CROSS_VALIDATORS[label].y_train = list(map(lambda z: 1 if z == label else 0, y_train))
 
 
-def train_model_cv() -> tuple[any, any, any]:
+def train_model_cv():  # -> tuple[any, any, any]:
     train, test, feature_names = preprocess_data_train_test_split()
     split_data_by_class_cv(train, test, feature_names)  # modifies the global BINARY_CLASSIFIERS dict
 
@@ -121,6 +149,7 @@ def train_model_cv() -> tuple[any, any, any]:
         CROSS_VALIDATORS[label].graph_pr_curve()
 
     return test[0], test[1], feature_names
+
 
 def pickle_models(x_test, y_test, feature_names):
     print('Storing models...')
@@ -133,7 +162,8 @@ def pickle_models(x_test, y_test, feature_names):
     pickle.dump(pickle_jar, open(location, 'wb+'))
     print('Models stored successfully')
 
-def unpickle_models():
+
+def unpickle_models_for_testing():
     filename = "models.pickle"
     location = os.path.join("..", "models", filename)
     pickle_jar = pickle.load(open(location, 'rb'))
@@ -148,13 +178,22 @@ def unpickle_models():
         CROSS_VALIDATORS[label].graph_pr_curve()
 
 
+# TODO: make this assign stuff to tweets
+def unpickle_models():
+    filename = "models.pickle"
+    location = os.path.join("..", "models", filename)
+    pickle_jar = pickle.load(open(location, 'rb'))
+    model_map: dict[str: CrossValidator] = {}
+    for label in CATEGORIES.values():
+        model = pickle_jar[label]
+        model_map[label] = CrossValidator(model['label'], model['model'])
+
+    return model_map
 
 
 if __name__ == '__main__':
     # x_test, y_test, feature_names = train_model_cv()
     # pickle_models(x_test, y_test, feature_names)
-    unpickle_models()
-
-
+    pass
 
     # bert_experiment.predict_bert(["@epicgames my account got hacked please help"])

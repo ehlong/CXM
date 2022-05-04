@@ -53,3 +53,4 @@ UI/my-electron-app/node_modules/
 twitter_key.yaml
 db_key.yaml
 TweetClassifier/src/__pycache__/
+TweetClassifier/models/

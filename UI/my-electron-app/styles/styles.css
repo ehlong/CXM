@@ -139,90 +139,45 @@ body {
 
 
 
-positive-link {
-  display: inline-block;
+/* Remove circular buttons */ 
+
+input[type=checkbox] { 	
+	display: none;
+}
+/*BUTTONS THAT CHANGE WHEN CLICKED */
+input[type=checkbox] + label img {
+	width: 3em;
+	height: 3em;
+}
+
+input[type=checkbox] + label img[alt~="check"] { 
+	display: none;
+}
+input[type=checkbox] + label img[alt~="uncheck"] { 
+	display: inline;
+}
+
+input[type=checkbox]:checked + label img[alt="uncheck"] { 
+	display: none;
+	
+} 
+input[type=checkbox]:checked + label img[alt="check"] { 
+	display: inline; 
 } 
 
-/* Remove circular buttons */ 
-input[type=radio] { 
-	display: none;
-}
-
-/*BUTTONS THAT CHANGE WHEN CLICKED */
-input[type=radio] + label .positive-link .positive-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .positive-link .positive-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .positive-link .positive-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .bugs-link .bugs-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .bugs-link .bugs-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .bugs-link .bugs-color{
-
-	display:inline-block;	
-}
-
-input[type=radio] + label .security-link .security-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .security-link .security-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .security-link .security-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .store-link .store-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .store-link .store-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .store-link .store-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .wants-link .wants-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .wants-link .wants-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .wants-link .wants-color{
-	display:inline-block;	
-}
-
-input[type=radio] + label .junk-link .junk-color { 
-	display: none;
-}
-
-input[type=radio]:checked + label .junk-link .junk-gray{
-	display: none;
-	
-}
-input[type=radio]:checked + label .junk-link .junk-color{
-	display:inline-block;	
-}
-
 input[type="submit"] {
+	padding-top: 10px;
+	color:white;
+	width: auto;
+	height: 34px;
+	padding: 5px 15px;
+	background: #1da1f2;
+	border: 0 none;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+button[type="button"] {
 	padding-top: 10px;
 	color:white;
 	width: auto;
@@ -240,54 +195,14 @@ input[type="submit"]:hover {
 	background: #80ceff;
 }
 
-/* MODAL STUFF */
-.modal {
-	display: none;
-	/* Hidden by default */
-	position: fixed;
-	/* Stay in place */
-	z-index: 1;
-	/* Sit on top */
-	padding-top: 300px;
-	/* Location of the box */
-	left: 0;
-	top: 0;
-	width: 100%;
-	/* Full width */
-	height: 100%;
-	/* Full height */
-	overflow: auto;
-	/* Enable scroll if needed */
-	background-color: rgb(0, 0, 0);
-	/* Fallback color */
-	background-color: rgba(0, 0, 0, 0.4);
-	/* Black w/ opacity */
+#TweetTable > tr{
+	padding-top: 100em;
+	padding-bottom: 100em;
 }
 
-/* Modal Content */
-.modal-content {
-	background-color: #fefefe;
-	margin: auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%;
+.inputBox_wrapper { 
+	width: 15%;
 }
-
-/* The Close Button */
-.close {
-	color: #aaaaaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-}
-
 /* Center the loader */
 #loader {
 	position: absolute;
@@ -311,7 +226,7 @@ input[type="submit"]:hover {
 #msg{
 	position: absolute;
 	text-align: center;
-	top: 55%;
+	top: 60%;
 	left: 0;
 	right: 0;
 	margin-left: auto;

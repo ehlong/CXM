@@ -69,6 +69,9 @@ def fetch_all_recent_tweets_from_twitter(latest_id: str) -> [dict]:
                 result = client.search_recent_tweets(query=query, max_results=100, tweet_fields=['created_at'],
                                                      next_token=next_token)
 
+        if result.data is None:
+            return []
+
         tweets.extend(
             {
                 'id': _['id'],
@@ -166,6 +169,19 @@ def fetch_all_classified_tweets() -> [dict]:
     return tweets
 
 
+def fetch_all_unclassified_tweets() -> [dict]:
+    """
+    Search the database for classified tweets
+    return tweets
+    :return: A list of tweets
+    """
+    db_collection = get_database_collection()
+    query = {'class': {'$exists': False}}
+    tweets = list(db_collection.find(query).sort('id', pymongo.DESCENDING))
+
+    return tweets
+
+
 def fetch_for_manual_classify(db_collection: Collection, num: int) -> [dict]:
     """
     Fetch num tweets from the collection to manually classify
@@ -245,6 +261,15 @@ def update_entire_database_to_dates():
     print(results.modified_count)
 
 
+def scrape_new_tweets_from_twitter():
+    """ Use this to perform normal tweet fetch"""
+    print('Scraping new tweets')
+    collection = get_database_collection()
+    recent_id = fetch_latest_id(collection)
+    collection_result = update_collection(collection, fetch_all_recent_tweets_from_twitter(recent_id))
+    print(f'Inserted {collection_result.upserted_count} new documents into the collection')
+
+
 """Neither of the below comment blocks should remain after UI linkage"""
 
 """ Use this to delete retweets"""
@@ -252,12 +277,6 @@ def update_entire_database_to_dates():
 # result = delete_retweets(collection)
 # print(f'Deleted {result.deleted_count} retweets from the database')
 
-""" Use this to perform normal tweet fetch"""
-# collection = get_database_collection()
-# recent_id = fetch_latest_id(collection)
-# collection_result = update_collection(collection, fetch_all_recent_tweets_from_twitter(recent_id))
-# print(f'Inserted {collection_result.upserted_count} new documents into the collection')
 
 # collection = get_database_collection()
 # download_database_backup(collection)
-
