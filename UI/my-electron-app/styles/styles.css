@@ -188,6 +188,9 @@ input[type="submit"]:hover {
 	padding-bottom: 100em;
 }
 
+.inputBox_wrapper { 
+	width: 15%;
+}
 /* Center the loader */
 #loader {
 	position: absolute;
